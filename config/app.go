@@ -97,7 +97,7 @@ func GetServerConfig() map[string]string {
 func GetFrameworkConfig() map[string]string {
 	timezone := viper.GetString("APP_TIMEZONE")
 	locale := viper.GetString("LOCALE")
-	color.Danger.Println(locale)
+	//	color.Danger.Println(locale)
 	// main.go文件的绝对路径
 	mainDirectory, _ := os.Getwd()
 	mainDirectory = mainDirectory + "/"
@@ -116,7 +116,7 @@ func GetFrameworkConfig() map[string]string {
 	if len(locale) == 0 {
 		locale = "en"
 	}
-	color.Danger.Println(locale)
+	//color.Danger.Println(locale)
 
 	conf := make(map[string]string)
 	conf["timezone"] = timezone // 时区

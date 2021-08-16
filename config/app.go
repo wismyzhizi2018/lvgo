@@ -40,6 +40,10 @@ func InitEnv() {
 
 func InitEmbedData(bytesContent []byte) {
 	//设置要读取的文件类型
+	if len(bytesContent) == 0 {
+		color.Error.Println("配置文件为空,请检查读取配置文件是否正确")
+		os.Exit(200)
+	}
 	color.Debug.Println("使用go:embed加载配置文件")
 	viper.SetConfigType("env")
 	//读取

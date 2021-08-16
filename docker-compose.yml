@@ -1,0 +1,14 @@
+version: '2'
+
+networks:
+  basic:
+services:
+  world:
+    container_name: ordertools
+    image: go-order-tools:v1.0
+    ports:
+      - "8090:8090"
+    volumes:
+      - /www/wwwroot/go/order/storage/logs:/www/wwwroot/go/order/storage/logs:rw
+    networks:
+      - basic

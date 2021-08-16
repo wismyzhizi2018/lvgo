@@ -10,7 +10,7 @@ import (
 
 var HttpServer *gin.Engine
 
-//go:embed .env
+//go:embed.env
 var BytesContent []byte
 
 type Application interface {
@@ -27,9 +27,11 @@ func init() {
 	// 设置存储位置
 	log.SetOutput(logFile)
 }
+
 func bootstraps(app Application) {
 	app.App()
 }
+
 func main() {
 	// 启动服务
 	var app Application = &bootstrap.Application{HttpServer: HttpServer, BytesContent: BytesContent}

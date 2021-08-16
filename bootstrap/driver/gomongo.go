@@ -2,8 +2,7 @@ package driver
 
 import (
 	"context"
-	"log"
-
+	"github.com/gookit/color"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -17,14 +16,14 @@ func InitMongo() {
 	// 连接到MongoDB
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		log.Println("连接到MongoDB失败，MongoDB功能将不可用。。。", err)
+		color.Danger.Println("连接到MongoDB失败，MongoDB功能将不可用。。。", err)
 	}
 
 	// 检查连接
 	err = client.Ping(context.TODO(), nil)
 	if err != nil {
-		log.Println("检查连接失败，MongoDB功能将不可用。。。", err)
+		color.Danger.Println("检查连接失败，MongoDB功能将不可用。。。", err)
 	}
 	MongodbClient = client
-	log.Println("Mongodb已连接 >>>")
+	color.Info.Println("Mongodb已连接 >>>")
 }

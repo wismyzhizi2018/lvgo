@@ -15,17 +15,17 @@ func trace(start, end byte) {
 }
 
 func main() {
-	runtime.GOMAXPROCS(1)
-	var wg sync.WaitGroup
+	runtime.GOMAXPROCS(1) //限制只有一个逻辑处理器
+	var wg sync.WaitGroup //用于等待所有协程都完成
 	wg.Add(2)
 	go func() {
-		defer wg.Done()
+		defer wg.Done() //程序退出的时候执行
 		trace('A', 'Z')
 	}()
 	go func() {
-		defer wg.Done()
+		defer wg.Done() //程序退出的时候执行
 		trace('a', 'z')
 	}()
-	wg.Wait()
+	wg.Wait() //等待所有协程的完成
 	fmt.Println("结束")
 }

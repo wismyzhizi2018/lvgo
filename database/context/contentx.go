@@ -9,7 +9,7 @@ import (
 var key string = "name"
 
 /**
-*Context 使用原则
+* Context 使用原则
 *1不要把Context放在结构体中，要以参数的方式传递
 *2以Context作为参数的函数方法，应该把Context作为第一个参数，放在第一位。
 *3给一个函数方法传递Context的时候，不要传递nil，如果不知道传递什么，就使用context.TODO

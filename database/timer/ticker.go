@@ -6,7 +6,6 @@ import (
 )
 
 //类似js 中的setInterval函数
-
 func main() {
 	t := time.NewTicker(2 * time.Second)
 	//	t1 := time.NewTimer(2 * time.Second)

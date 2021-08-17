@@ -13,6 +13,5 @@ func main() {
 		time := <-t.C
 		//time2 := <-t1.C
 		color.Info.Println(time.Format("2006-01-01 15:04:05"))
-		//color.Danger.Println(time2.Format("2006-01-01 15:04:05"))
 	}
 }

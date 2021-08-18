@@ -1,3 +1,27 @@
+### 目录机构
+```
+├─app
+│  ├─Common
+│  ├─Helpers
+│  ├─Http
+│  │  ├─Controllers
+│  │  ├─Middlewares
+│  │  ├─Models
+│  │  └─Request
+│  ├─Libs
+│  └─Repositories
+├─bootstrap
+│  └─driver
+├─config
+├─database
+├─routes
+│  └─RouterGroup
+├─service
+├─storage
+├─tmp
+└─vendor
+```
+
 ####  如时使用指针类型
 
 1. 如果方法需要修改接受者，接受者必须是指针类型。

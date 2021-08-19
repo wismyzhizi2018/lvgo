@@ -32,6 +32,7 @@ func bootstraps(app Application) {
 	app.App()
 }
 
+//go:generate goversioninfo -icon=resource/icon.ico -manifest=resource/goversioninfo.exe.manifest
 func main() {
 	// 启动服务
 	var app Application = &bootstrap.Application{HttpServer: HttpServer, BytesContent: BytesContent}

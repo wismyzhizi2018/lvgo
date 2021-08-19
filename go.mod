@@ -17,6 +17,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/gookit/color v1.4.2
 	github.com/gorilla/websocket v1.4.2
+	github.com/josephspurrier/goversioninfo v1.3.0 // indirect
 	github.com/jteeuwen/go-bindata v3.0.7+incompatible // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible // indirect
 	github.com/lestrrat-go/strftime v1.0.5 // indirect

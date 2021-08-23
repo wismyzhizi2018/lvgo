@@ -13,6 +13,6 @@ const (
 	Acetaminophen = Paracetamol
 )
 
-func main()  {
-	fmt.Printf("%s",Acetaminophen)
+func main() {
+	fmt.Printf("%s", Acetaminophen)
 }

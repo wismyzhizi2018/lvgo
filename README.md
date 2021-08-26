@@ -13,7 +13,7 @@
 ├─bootstrap
 │  └─driver
 ├─config
-├─database
+├─database 这个目录下是学习代码
 ├─routes
 │  └─RouterGroup
 ├─service
@@ -40,7 +40,7 @@
 
 4. 切片and数组
 
-#### 工具
+#### 代码热加载工具
 ```
 go get github.com/pilu/fresh
 ```

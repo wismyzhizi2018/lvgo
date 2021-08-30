@@ -64,8 +64,8 @@ func (app *Application) App() {
 		}()
 	}
 
-	//启用x-request-id中间件
-	HttpServer.Use(Middlewares.RequestId)
+	//启用链路追踪中间件
+	HttpServer.Use(Middlewares.Jaeger())
 
 	//启用日志中间件
 	HttpServer.Use(Middlewares.LoggerToFiles())

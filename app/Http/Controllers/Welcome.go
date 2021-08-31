@@ -1,11 +1,8 @@
 package Controllers
 
 import (
-	"fmt"
+	"net/http"
 	"order/app/Common"
-	"order/app/Http/Models/Kit"
-	"time"
-
 	//"ginvel.com/app/Kit"
 	"math"
 	"order/config"
@@ -23,12 +20,12 @@ func Welcome(ctx *gin.Context) {
 	var _cpuPercent interface{} = Common.GetGlobalData("cpu_percent")
 	var __cpuPercent float64 = _cpuPercent.(float64)
 	var cpuPercent int64 = int64(math.Floor(__cpuPercent))
-	fmt.Println(Kit.RDB.Set(ctx, "go_database_jwt_cache:15999640681", "123", time.Second*15))
-	fmt.Println(Kit.RDB.Set(ctx, "15999640682", "456", time.Second*15))
-	fmt.Println(Kit.RDB.Set(ctx, "15999640683", "123", time.Second*60))
-	fmt.Println(Kit.RDB.Get(ctx, "15999640682"))
-	fmt.Println(Kit.RDB.Get(ctx, "15999640681"))
-	fmt.Println(Kit.RDB.Get(ctx, "15999640683"))
+	//fmt.Println(Kit.RDB.Set(ctx, "go_database_jwt_cache:15999640681", "123", time.Second*15))
+	//fmt.Println(Kit.RDB.Set(ctx, "15999640682", "456", time.Second*15))
+	//fmt.Println(Kit.RDB.Set(ctx, "15999640683", "123", time.Second*60))
+	//fmt.Println(Kit.RDB.Get(ctx, "15999640682"))
+	//fmt.Println(Kit.RDB.Get(ctx, "15999640681"))
+	//fmt.Println(Kit.RDB.Get(ctx, "15999640683"))
 
 	var back = map[string]interface{}{
 		"state": 1,
@@ -42,7 +39,7 @@ func Welcome(ctx *gin.Context) {
 		},
 	}
 
-	ctx.JSONP(200, back)
+	ctx.JSONP(http.StatusOK, back)
 }
 
 // Api

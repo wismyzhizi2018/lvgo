@@ -52,7 +52,7 @@ func (app *Application) App() {
 
 	//svc.InitConnection()
 	// Gin服务
-	HttpServer = gin.Default()
+	HttpServer = gin.New()
 
 	if serverConfig["ENV"] == "debug" {
 		pprof.Register(HttpServer)

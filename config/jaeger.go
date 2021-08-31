@@ -9,19 +9,20 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
 )
 
 var jc JaegerConfig
 
 type JaegerConfig struct {
-	Enabled     string
+	Enabled     bool
 	ServiceName string
 	Agent       interface{}
 }
 
 // NewTracer
 func NewTracer(service string) (opentracing.Tracer, io.Closer) {
-	parseConfig()
+	ParseConfig()
 	return newTracer(service, "")
 }
 
@@ -51,8 +52,8 @@ func newTracer(service, collectorEndpoint string) (opentracing.Tracer, io.Closer
 	return tracer, closer
 }
 
-// parseConfig 从 viper 中解析配置信息
-func parseConfig() JaegerConfig {
+// ParseConfig 从 viper 中解析配置信息
+func ParseConfig() JaegerConfig {
 	enabled := viper.GetString("JAEGER_ENABLED")
 	agent := viper.GetString("OPENTRACING_AGENT")
 	name := viper.GetString("JAEGER_SERVICE_NAME")
@@ -67,7 +68,7 @@ func parseConfig() JaegerConfig {
 		log.Println("JAEGER_SERVICE_NAME 不能为空")
 		os.Exit(200)
 	}
-	jc.Enabled = enabled
+	jc.Enabled, _ = strconv.ParseBool(enabled)
 	jc.Agent = map[string]string{"host": agent}
 	jc.ServiceName = name
 	return jc

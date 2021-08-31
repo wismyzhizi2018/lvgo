@@ -58,17 +58,21 @@ func (app *Application) App() {
 		pprof.Register(HttpServer)
 		go func() {
 			if err := statsviz.RegisterDefault(); err != nil {
-				log.Println("开启SV监控失败", err.Error())
+				color.Danger.Println("开启SV监控失败", err.Error())
 			}
-			log.Println(http.ListenAndServe("localhost:8080", nil))
+			color.Debug.Println(http.ListenAndServe("localhost:8080", nil))
 		}()
 	}
 
 	//启用链路追踪中间件
 	HttpServer.Use(Middlewares.RequestId)
 
-	//启用链路追踪中间件
-	HttpServer.Use(Middlewares.Jaeger())
+	jaegerConfig := config.ParseConfig()
+	if jaegerConfig.Enabled {
+		//启用链路追踪中间件
+		color.Debug.Println("启用链路追踪中间件 ")
+		HttpServer.Use(Middlewares.Jaeger())
+	}
 
 	//启用日志中间件
 	HttpServer.Use(Middlewares.LoggerToFiles())
@@ -92,7 +96,7 @@ func (app *Application) App() {
 	// 注册其他路由，可以自定义
 
 	if serverConfig["ENV"] == "debug" {
-		log.Println("开启  pprof>>> ")
+		color.Debug.Println("开启  pprof>>> ")
 		pprof.RouteRegister(routes.RouterRegister(HttpServer))
 	} else {
 		routes.RouterRegister(HttpServer)

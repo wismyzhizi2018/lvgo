@@ -1,13 +1,13 @@
 package Controllers
 
 import (
-	"net/http"
+	"math"
 	"order/app/Common"
 	//"ginvel.com/app/Kit"
-	"math"
 	"order/config"
 
 	"github.com/gin-gonic/gin"
+	util "order/app/Helpers"
 )
 
 // Welcome
@@ -38,8 +38,8 @@ func Welcome(ctx *gin.Context) {
 			"cpu_percent": cpuPercent,
 		},
 	}
-
-	ctx.JSONP(http.StatusOK, back)
+	util.SuccessJson("请求成功", back)(ctx)
+	//ctx.JSONP(http.StatusOK, back)
 }
 
 // Api
@@ -48,11 +48,14 @@ func Welcome(ctx *gin.Context) {
 // @Router / [GET]
 func Api(ctx *gin.Context) {
 
-	name := "123"
+	name := ctx.Query("name")
+
 	if len(name) == 0 {
 		name = "name为空"
+		util.FailJson(1, name, gin.H{}, gin.H{})(ctx)
+		return
 	}
-	_id := "123"
+	_id := ctx.Query("id")
 	id := Common.StringToInt(_id)
 
 	content := map[string]interface{}{
@@ -61,10 +64,8 @@ func Api(ctx *gin.Context) {
 	}
 
 	var back = map[string]interface{}{
-		"state":   1,
-		"msg":     "接口请求成功，进入CorsApi示例",
 		"content": content,
 	}
 
-	ctx.JSONP(200, back)
+	util.SuccessJson("接口请求成功，进入CorsApi示例", back)(ctx)
 }

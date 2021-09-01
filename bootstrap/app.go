@@ -160,7 +160,7 @@ func (app *Application) App() {
 	serverPort, _ := strconv.Atoi(serverConfig["PORT"])
 	registerClient := Consul.NewRegistryClient(host, port)
 	serviceId := fmt.Sprintf("%s", uuid.NewV4())
-	err := registerClient.Register("192.168.0.49", serverPort, "lvgo-serverce", []string{"php", "go", "laravel", "gin"}, serviceId)
+	err := registerClient.Register("192.168.0.49", serverPort, "lvgo-services", []string{"php", "go", "laravel", "gin"}, serviceId)
 	if err != nil {
 		color.Danger.Println("consul:", err)
 		os.Exit(1)

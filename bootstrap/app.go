@@ -2,12 +2,17 @@ package bootstrap
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"order/app/Libs/Consul"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
+
+	"github.com/satori/go.uuid"
 
 	"github.com/arl/statsviz"
 	"github.com/gin-contrib/pprof"
@@ -144,7 +149,23 @@ func (app *Application) App() {
 			color.Debug.Printf("listen: %s\n", err)
 			os.Exit(1)
 		}
+
 	}()
+
+	//使用注册中心上报id和服务器状态
+	consulConfig := config.GetConsulConfig()
+	fmt.Println(consulConfig)
+	host = consulConfig["HOST"]
+	port, _ := strconv.Atoi(consulConfig["PORT"])
+	serverPort, _ := strconv.Atoi(serverConfig["PORT"])
+	registerClient := Consul.NewRegistryClient(host, port)
+	serviceId := fmt.Sprintf("%s", uuid.NewV4())
+	err := registerClient.Register("192.168.0.49", serverPort, "lvgo-serverce", []string{"php", "go", "laravel", "gin"}, serviceId)
+	if err != nil {
+		color.Danger.Println("consul:", err)
+		os.Exit(1)
+	}
+
 	quit := make(chan os.Signal)
 	// kill (no param) default send syscanll.SIGTERM
 	// kill -2 is syscall.SIGINT
@@ -153,7 +174,7 @@ func (app *Application) App() {
 	<-quit
 	color.Info.Println("Shutdown Server ...")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
 		color.Danger.Println("Server Shutdown:", err)
@@ -164,8 +185,11 @@ func (app *Application) App() {
 	case <-ctx.Done():
 		color.Info.Println("timeout of 5 seconds.")
 	}
-	color.Info.Println("Server exiting")
-
+	if err = registerClient.DeRegister(serviceId); err != nil {
+		color.Danger.Printf("注销console ,%s", err)
+	}
+	color.Info.Printf("注销console ,%s", "success")
+	color.Info.Println("exit Server ...")
 	//err := HttpServer.Run(host)
 	//if err != nil {
 	//	log.Println("http服务遇到错误，运行中断，error：", err.Error())

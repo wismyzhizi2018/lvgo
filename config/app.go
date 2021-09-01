@@ -228,3 +228,13 @@ func GetViewConfig() map[string]string {
 	conf["View_Static"] = static
 	return conf
 }
+
+// GetConsulConfig 框架参数配置
+func GetConsulConfig() map[string]string {
+	host := viper.GetString("CONSUL_HOST")
+	port := viper.GetString("CONSUL_POST")
+	conf := make(map[string]string)
+	conf["HOST"] = host // 监听地址，部署在docker中请使用：0.0.0.0。建议不要用127.0.0.1或localhost
+	conf["PORT"] = port // 监听端口
+	return conf
+}

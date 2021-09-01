@@ -35,6 +35,11 @@ func RouteMust(route *gin.Engine) {
 	// 默认根路由
 	route.Any("/", Middlewares.HttpCorsApi, Middlewares.HttpLimiter(2), Middlewares.RankingLimiter(int64(5)), Controllers.Welcome)
 
+	route.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 	// 404路由
 	route.NoRoute(Middlewares.HttpCorsApi, Middlewares.HttpLimiter(2), func(ctx *gin.Context) {
 		var url string = ctx.Request.Host + ctx.Request.URL.Path

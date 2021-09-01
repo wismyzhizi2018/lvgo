@@ -19,6 +19,7 @@ require (
 	github.com/gookit/color v1.4.2
 	github.com/gorilla/websocket v1.4.2
 	github.com/mattn/go-isatty v0.0.13 // indirect
+	github.com/nacos-group/nacos-sdk-go v1.0.8
 	github.com/opentracing/opentracing-go v1.1.1-0.20190913142402-a7454ce5950e
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/rpcxio/rpcx-gateway v0.0.0-20210512062600-6dcb6be40a61

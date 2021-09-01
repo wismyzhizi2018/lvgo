@@ -1,5 +1,17 @@
 # github.com/HdrHistogram/hdrhistogram-go v1.1.2
 ## explicit
+# github.com/aliyun/alibaba-cloud-sdk-go v1.61.18
+github.com/aliyun/alibaba-cloud-sdk-go/sdk
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials/provider
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/signers
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/endpoints
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/errors
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/responses
+github.com/aliyun/alibaba-cloud-sdk-go/sdk/utils
+github.com/aliyun/alibaba-cloud-sdk-go/services/kms
 # github.com/apache/thrift v0.14.0
 github.com/apache/thrift/lib/go/thrift
 # github.com/arl/statsviz v0.4.0
@@ -7,6 +19,8 @@ github.com/apache/thrift/lib/go/thrift
 github.com/arl/statsviz
 # github.com/armon/go-metrics v0.3.6
 github.com/armon/go-metrics
+# github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23
+github.com/buger/jsonparser
 # github.com/cenk/backoff v2.2.1+incompatible
 github.com/cenk/backoff
 # github.com/cenkalti/backoff v2.2.1+incompatible
@@ -49,6 +63,8 @@ github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/bytesconv
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
+# github.com/go-errors/errors v1.0.1
+github.com/go-errors/errors
 # github.com/go-ping/ping v0.0.0-20201115131931-3300c582a663
 github.com/go-ping/ping
 # github.com/go-playground/locales v0.13.0
@@ -133,6 +149,8 @@ github.com/hashicorp/serf/coordinate
 github.com/jinzhu/inflection
 # github.com/jinzhu/now v1.1.2
 github.com/jinzhu/now
+# github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af
+github.com/jmespath/go-jmespath
 # github.com/json-iterator/go v1.1.11
 github.com/json-iterator/go
 # github.com/juju/ratelimit v1.0.1
@@ -153,6 +171,10 @@ github.com/klauspost/cpuid/v2
 github.com/klauspost/reedsolomon
 # github.com/leodido/go-urn v1.2.0
 github.com/leodido/go-urn
+# github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f
+github.com/lestrrat/go-file-rotatelogs
+# github.com/lestrrat/go-strftime v0.0.0-20180220042222-ba3bf9c1d042
+github.com/lestrrat/go-strftime
 # github.com/lucas-clemente/quic-go v0.18.0
 github.com/lucas-clemente/quic-go
 github.com/lucas-clemente/quic-go/internal/ackhandler
@@ -189,6 +211,24 @@ github.com/mitchellh/mapstructure
 github.com/modern-go/concurrent
 # github.com/modern-go/reflect2 v1.0.1
 github.com/modern-go/reflect2
+# github.com/nacos-group/nacos-sdk-go v1.0.8
+## explicit
+github.com/nacos-group/nacos-sdk-go/clients
+github.com/nacos-group/nacos-sdk-go/clients/cache
+github.com/nacos-group/nacos-sdk-go/clients/config_client
+github.com/nacos-group/nacos-sdk-go/clients/nacos_client
+github.com/nacos-group/nacos-sdk-go/clients/naming_client
+github.com/nacos-group/nacos-sdk-go/common/constant
+github.com/nacos-group/nacos-sdk-go/common/file
+github.com/nacos-group/nacos-sdk-go/common/http_agent
+github.com/nacos-group/nacos-sdk-go/common/logger
+github.com/nacos-group/nacos-sdk-go/common/nacos_error
+github.com/nacos-group/nacos-sdk-go/common/nacos_server
+github.com/nacos-group/nacos-sdk-go/common/security
+github.com/nacos-group/nacos-sdk-go/inner/uuid
+github.com/nacos-group/nacos-sdk-go/model
+github.com/nacos-group/nacos-sdk-go/util
+github.com/nacos-group/nacos-sdk-go/vo
 # github.com/opentracing/opentracing-go v1.1.1-0.20190913142402-a7454ce5950e
 ## explicit
 github.com/opentracing/opentracing-go
@@ -257,6 +297,8 @@ github.com/templexxx/cpufeat
 github.com/templexxx/xor
 # github.com/tjfoc/gmsm v1.4.0
 github.com/tjfoc/gmsm/sm4
+# github.com/toolkits/concurrent v0.0.0-20150624120057-a4371d70e3e3
+github.com/toolkits/concurrent/semaphore
 # github.com/uber/jaeger-client-go v2.29.1+incompatible
 ## explicit
 github.com/uber/jaeger-client-go
@@ -348,6 +390,15 @@ go.opencensus.io/trace/internal
 go.opencensus.io/trace/tracestate
 # go.uber.org/atomic v1.7.0
 go.uber.org/atomic
+# go.uber.org/multierr v1.6.0
+go.uber.org/multierr
+# go.uber.org/zap v1.17.0
+go.uber.org/zap
+go.uber.org/zap/buffer
+go.uber.org/zap/internal/bufferpool
+go.uber.org/zap/internal/color
+go.uber.org/zap/internal/exit
+go.uber.org/zap/zapcore
 # golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e
 ## explicit
 golang.org/x/crypto/blowfish

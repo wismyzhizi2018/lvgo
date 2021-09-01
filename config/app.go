@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -47,6 +48,27 @@ func InitEnv() {
 // @title  从配置中心读取配置文件
 // @description  从配置中心读取配置文件
 func InitNACOS() {
+	mainDirectory, _ := os.Getwd()
+	logFilePath := mainDirectory + "/tmp/nacos/log/"
+	logFileName := "nacos.log"
+	//日志文件
+	fileName := path.Join(logFilePath, logFileName)
+	//写入文件
+	_, err := os.Stat(fileName)
+	if !(err == nil || os.IsExist(err)) {
+		var err error
+		//目录不存在则创建
+		if _, err = os.Stat(logFilePath); err != nil {
+			if err = os.MkdirAll(logFilePath, 0777); err != nil { //这里如果是0711权限 可能会导致其它线程，读取文件夹内内容出错
+				color.Danger.Println("Create log dir err :", err)
+			}
+		}
+		//创建文件
+		if _, err = os.Create(fileName); err != nil {
+			color.Danger.Println("Create log file err :", err)
+		}
+	}
+
 	sc := []constant.ServerConfig{
 		{
 			IpAddr: "192.168.0.29",
@@ -70,7 +92,9 @@ func InitNACOS() {
 		"clientConfig":  cc,
 	})
 	if err != nil {
-		panic(err)
+		color.Danger.Println("nacos read Error = ", err.Error(), "运行中断")
+		fmt.Println(err.Error())
+		os.Exit(200)
 	}
 
 	content, err := configClient.GetConfig(vo.ConfigParam{

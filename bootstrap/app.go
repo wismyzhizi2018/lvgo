@@ -1,19 +1,23 @@
 package bootstrap
 
 import (
+	"context"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	"github.com/arl/statsviz"
 	"github.com/gin-contrib/pprof"
-	"github.com/gin-gonic/gin"
 	"github.com/gookit/color"
-	"log"
-	"net/http"
 	"order/app/Http/Middlewares"
 	"order/app/Http/Models/Kit"
 	"order/app/Http/Request"
 	"order/bootstrap/driver"
 	"order/config"
 	"order/routes"
-	"os"
 )
 
 type Application struct {
@@ -128,12 +132,44 @@ func (app *Application) App() {
 	// 终端提示
 	color.Debug.Println(shellMessage)
 
-	err := HttpServer.Run(host)
-	if err != nil {
-		log.Println("http服务遇到错误，运行中断，error：", err.Error())
-		log.Println("提示：注意端口被占时应该首先更改对外暴露的端口，而不是微服务的端口。")
-		os.Exit(200)
+	srv := &http.Server{
+		Addr:    ":" + serverConfig["PORT"],
+		Handler: HttpServer,
 	}
 
+	go func() {
+		// service connections
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			color.Debug.Printf("listen: %s\n", err)
+			os.Exit(1)
+		}
+	}()
+	quit := make(chan os.Signal)
+	// kill (no param) default send syscanll.SIGTERM
+	// kill -2 is syscall.SIGINT
+	// kill -9 is syscall. SIGKILL but can"t be catch, so don't need add it
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	color.Info.Println("Shutdown Server ...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		color.Danger.Println("Server Shutdown:", err)
+		os.Exit(1)
+	}
+	// catching ctx.Done(). timeout of 5 seconds.
+	select {
+	case <-ctx.Done():
+		color.Info.Println("timeout of 5 seconds.")
+	}
+	color.Info.Println("Server exiting")
+
+	//err := HttpServer.Run(host)
+	//if err != nil {
+	//	log.Println("http服务遇到错误，运行中断，error：", err.Error())
+	//	log.Println("提示：注意端口被占时应该首先更改对外暴露的端口，而不是微服务的端口。")
+	//	os.Exit(200)
+	//}
 	return
 }

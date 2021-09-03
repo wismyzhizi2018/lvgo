@@ -6,6 +6,7 @@ services:
   world:
     container_name: ordertools
     image: go-order-tools:v1.0
+    restart: always
     ports:
       - "8090:8090"
     volumes:

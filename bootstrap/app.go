@@ -143,13 +143,13 @@ func (app *Application) App() {
 		Handler: HttpServer,
 	}
 
+	//后台启动一个goroutine来启动服务
 	go func() {
 		// service connections
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			color.Debug.Printf("listen: %s\n", err)
 			os.Exit(1)
 		}
-
 	}()
 
 	//使用注册中心上报id和服务器状态

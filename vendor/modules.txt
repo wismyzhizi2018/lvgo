@@ -63,6 +63,11 @@ github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/bytesconv
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
+# github.com/gin-middleware/xxl-job-executor v1.0.0
+## explicit
+github.com/gin-middleware/xxl-job-executor
+# github.com/go-basic/ipv4 v1.0.0
+github.com/go-basic/ipv4
 # github.com/go-errors/errors v1.0.1
 github.com/go-errors/errors
 # github.com/go-ping/ping v0.0.0-20201115131931-3300c582a663
@@ -116,6 +121,7 @@ github.com/gorilla/websocket
 # github.com/grandcat/zeroconf v0.0.0-20180329153754-df75bb3ccae1
 github.com/grandcat/zeroconf
 # github.com/hashicorp/consul/api v1.8.1
+## explicit
 github.com/hashicorp/consul/api
 # github.com/hashicorp/errwrap v1.0.0
 github.com/hashicorp/errwrap
@@ -345,6 +351,10 @@ github.com/xdg-go/stringprep
 github.com/xo/terminfo
 # github.com/xtaci/kcp-go v5.4.20+incompatible
 github.com/xtaci/kcp-go
+# github.com/xxl-job/xxl-job-executor-go v1.0.1
+## explicit
+github.com/xxl-job/xxl-job-executor-go
+github.com/xxl-job/xxl-job-executor-go/example/task
 # github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d
 github.com/youmark/pkcs8
 # go.mongodb.org/mongo-driver v1.7.0

@@ -116,33 +116,34 @@ func (app *Application) App() {
 	}
 
 	//xxl-job
-
+	xxlConfig := config.GetXXLJobConfig()
 	//初始化执行器
-	exec := xxl.NewExecutor(
-		xxl.ServerAddr("http://192.168.0.29:8083/xxl-job-admin"),
-		xxl.AccessToken(""),                    //请求令牌(默认为空)
-		xxl.ExecutorIp("192.168.0.49"),         //可自动获取
-		xxl.ExecutorPort(serverConfig["PORT"]), //默认9999（此处要与gin服务启动port必需一至）
-		xxl.RegistryKey("golang-jobs"),         //执行器名称
-		//xxl.SetLogger(&logger{}), //执行器名称
-	)
-	exec.Init()
-	defer exec.Stop()
-	//设置日志查看handler
-	//exec.LogHandler(func(req *xxl.LogReq) *xxl.LogRes {
-	//	return &xxl.LogRes{Code: 200, Msg: "", Content: xxl.LogResContent{
-	//		FromLineNum: req.FromLineNum,
-	//		ToLineNum:   2,
-	//		LogContent:  "这个是自定义日志handler",
-	//		IsEnd:       true,
-	//	}}
-	//})
-	xxl_job_executor_gin.XxlJobMux(HttpServer, exec)
-	//注册任务handler
-	exec.RegTask("task.test", task.Test)
-	exec.RegTask("task.test2", task.Test2)
-	exec.RegTask("task.panic", task.Panic)
-
+	if xxlConfig.Enabled {
+		exec := xxl.NewExecutor(
+			xxl.ServerAddr(xxlConfig.ServerAddr),
+			xxl.AccessToken(xxlConfig.AccessToken), //请求令牌(默认为空)
+			xxl.ExecutorIp(xxlConfig.ExecutorIp),   //可自动获取
+			xxl.ExecutorPort(serverConfig["PORT"]), //默认9999（此处要与gin服务启动port必需一至）
+			xxl.RegistryKey(xxlConfig.RegistryKey), //执行器名称
+			//xxl.SetLogger(&logger{}), //执行器名称
+		)
+		exec.Init()
+		defer exec.Stop()
+		//设置日志查看handler
+		//exec.LogHandler(func(req *xxl.LogReq) *xxl.LogRes {
+		//	return &xxl.LogRes{Code: 200, Msg: "", Content: xxl.LogResContent{
+		//		FromLineNum: req.FromLineNum,
+		//		ToLineNum:   2,
+		//		LogContent:  "这个是自定义日志handler",
+		//		IsEnd:       true,
+		//	}}
+		//})
+		xxl_job_executor_gin.XxlJobMux(HttpServer, exec)
+		//注册任务handler
+		exec.RegTask("task.test", task.Test)
+		exec.RegTask("task.test2", task.Test2)
+		exec.RegTask("task.panic", task.Panic)
+	}
 	//Router.Api(HttpServer) // 面向Api
 	//Router.Web(HttpServer) // 面向模版输出
 

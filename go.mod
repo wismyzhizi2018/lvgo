@@ -4,6 +4,8 @@ go 1.16
 
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
+	github.com/apache/rocketmq-client-go v1.2.4 // indirect
+	github.com/apache/rocketmq-client-go/v2 v2.1.0
 	github.com/arl/statsviz v0.4.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/didip/tollbooth v4.0.2+incompatible

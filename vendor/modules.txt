@@ -12,6 +12,18 @@ github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests
 github.com/aliyun/alibaba-cloud-sdk-go/sdk/responses
 github.com/aliyun/alibaba-cloud-sdk-go/sdk/utils
 github.com/aliyun/alibaba-cloud-sdk-go/services/kms
+# github.com/apache/rocketmq-client-go v1.2.4
+## explicit
+# github.com/apache/rocketmq-client-go/v2 v2.1.0
+## explicit
+github.com/apache/rocketmq-client-go/v2
+github.com/apache/rocketmq-client-go/v2/consumer
+github.com/apache/rocketmq-client-go/v2/internal
+github.com/apache/rocketmq-client-go/v2/internal/remote
+github.com/apache/rocketmq-client-go/v2/internal/utils
+github.com/apache/rocketmq-client-go/v2/primitive
+github.com/apache/rocketmq-client-go/v2/producer
+github.com/apache/rocketmq-client-go/v2/rlog
 # github.com/apache/thrift v0.14.0
 github.com/apache/thrift/lib/go/thrift
 # github.com/arl/statsviz v0.4.0
@@ -44,6 +56,13 @@ github.com/didip/tollbooth/libstring
 github.com/didip/tollbooth/limiter
 # github.com/edwingeng/doublejump v0.0.0-20200219153503-7cfc0ed6e836
 github.com/edwingeng/doublejump
+# github.com/emirpasic/gods v1.12.0
+github.com/emirpasic/gods/containers
+github.com/emirpasic/gods/maps
+github.com/emirpasic/gods/maps/treemap
+github.com/emirpasic/gods/trees
+github.com/emirpasic/gods/trees/redblacktree
+github.com/emirpasic/gods/utils
 # github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a
 github.com/facebookgo/clock
 # github.com/fatih/color v1.12.0
@@ -105,6 +124,8 @@ github.com/go-stack/stack
 github.com/gogo/protobuf/proto
 # github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e
 github.com/golang/groupcache/lru
+# github.com/golang/mock v1.5.0
+github.com/golang/mock/gomock
 # github.com/golang/protobuf v1.5.2
 github.com/golang/protobuf/proto
 # github.com/golang/snappy v0.0.2
@@ -301,6 +322,12 @@ github.com/subosito/gotenv
 github.com/templexxx/cpufeat
 # github.com/templexxx/xor v0.0.0-20191217153810-f85b25db303b
 github.com/templexxx/xor
+# github.com/tidwall/gjson v1.2.1
+github.com/tidwall/gjson
+# github.com/tidwall/match v1.0.1
+github.com/tidwall/match
+# github.com/tidwall/pretty v1.0.0
+github.com/tidwall/pretty
 # github.com/tjfoc/gmsm v1.4.0
 github.com/tjfoc/gmsm/sm4
 # github.com/toolkits/concurrent v0.0.0-20150624120057-a4371d70e3e3
@@ -510,3 +537,5 @@ gorm.io/gorm/logger
 gorm.io/gorm/migrator
 gorm.io/gorm/schema
 gorm.io/gorm/utils
+# stathat.com/c/consistent v1.0.0
+stathat.com/c/consistent

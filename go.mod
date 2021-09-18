@@ -13,6 +13,7 @@ require (
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.2
 	github.com/gin-middleware/xxl-job-executor v1.0.0
+	github.com/go-mysql-org/go-mysql v1.3.0
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.4.1
@@ -30,6 +31,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rpcxio/rpcx-gateway v0.0.0-20210512062600-6dcb6be40a61
 	github.com/satori/go.uuid v1.2.0
+	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
 	github.com/sirupsen/logrus v1.8.1
 	github.com/smallnest/rpcx v1.6.9
 	github.com/spf13/viper v1.8.1

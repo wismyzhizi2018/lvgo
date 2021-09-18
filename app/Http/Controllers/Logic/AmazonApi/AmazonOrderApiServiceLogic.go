@@ -112,7 +112,8 @@ func (a Account) GetOrderItems(orderId string) {
 		return nil
 	}),
 	)
+	var NextToken string
 	ctx := context.Background()
-	result, _ := c.GetOrder(ctx, orderId)
+	result, _ := c.GetOrderItems(ctx, orderId, &ordersV0.GetOrderItemsParams{NextToken: &NextToken})
 	fmt.Println(result)
 }

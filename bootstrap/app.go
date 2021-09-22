@@ -40,8 +40,8 @@ func (app *Application) App() {
 	// 必选初始化
 	HttpServer := app.HttpServer
 	//加载配置信息
-	//config.InitEmbedData(app.BytesContent)
-	config.InitNACOS()
+	config.InitEmbedData(app.BytesContent)
+	//config.InitNACOS()
 
 	//获取配置信息
 	serverConfig := config.GetServerConfig()
@@ -186,18 +186,19 @@ func (app *Application) App() {
 
 	//使用注册中心上报id和服务器状态
 	consulConfig := config.GetConsulConfig()
-	fmt.Println(consulConfig)
-	host = consulConfig["HOST"]
-	port, _ := strconv.Atoi(consulConfig["PORT"])
+
+	host = consulConfig["HOST"].(string)
+	port, _ := strconv.Atoi(consulConfig["PORT"].(string))
 	serverPort, _ := strconv.Atoi(serverConfig["PORT"])
 	registerClient := Consul.NewRegistryClient(host, port)
 	serviceId := fmt.Sprintf("%s", uuid.NewV4())
-	err := registerClient.Register("192.168.0.49", serverPort, "lvgo-services", []string{"php", "go", "laravel", "gin"}, serviceId)
-	if err != nil {
-		color.Danger.Println("consul:", err)
-		os.Exit(1)
+	if consulConfig["Enabled"].(bool) {
+		err := registerClient.Register("192.168.0.49", serverPort, "lvgo-services", []string{"php", "go", "laravel", "gin"}, serviceId)
+		if err != nil {
+			color.Danger.Println("consul:", err)
+			os.Exit(1)
+		}
 	}
-
 	quit := make(chan os.Signal)
 	// kill (no param) default send syscanll.SIGTERM
 	// kill -2 is syscall.SIGINT
@@ -217,8 +218,10 @@ func (app *Application) App() {
 	case <-ctx.Done():
 		color.Info.Println("timeout of 5 seconds.")
 	}
-	if err = registerClient.DeRegister(serviceId); err != nil {
-		color.Danger.Printf("注销console ,%s", err)
+	if consulConfig["Enabled"].(bool) {
+		if errs := registerClient.DeRegister(serviceId); errs != nil {
+			color.Danger.Printf("注销console ,%s", errs)
+		}
 	}
 	color.Info.Printf("注销console ,%s", "success")
 	color.Info.Println("exit Server ...")

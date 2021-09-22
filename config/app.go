@@ -10,6 +10,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 
 	"github.com/nacos-group/nacos-sdk-go/clients"
@@ -230,11 +231,12 @@ func GetViewConfig() map[string]string {
 }
 
 // GetConsulConfig 框架参数配置
-func GetConsulConfig() map[string]string {
+func GetConsulConfig() map[string]interface{} {
 	host := viper.GetString("CONSUL_HOST")
 	port := viper.GetString("CONSUL_POST")
-	conf := make(map[string]string)
+	conf := make(map[string]interface{})
 	conf["HOST"] = host // 监听地址，部署在docker中请使用：0.0.0.0。建议不要用127.0.0.1或localhost
 	conf["PORT"] = port // 监听端口
+	conf["Enabled"], _ = strconv.ParseBool(viper.GetString("CONSUL_ENABLED"))
 	return conf
 }

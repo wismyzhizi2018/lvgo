@@ -18,7 +18,7 @@ COPY . .
 
 # 编译可执行二进制文件(一定要写这些编译参数，指定了可执行程序的运行平台,参考：https://www.jianshu.com/p/4b345a9e768e)
 #RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o webserver
-RUN go install ./../...
+RUN go install
 
 
 # 构建生产镜像，使用最小的linux镜像，只有5M

@@ -18,7 +18,7 @@ COPY . .
 
 # 编译可执行二进制文件(一定要写这些编译参数，指定了可执行程序的运行平台,参考：https://www.jianshu.com/p/4b345a9e768e)
 #RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o webserver
-RUN go build -o webserver
+RUN go install ./../...
 
 
 # 构建生产镜像，使用最小的linux镜像，只有5M
@@ -31,10 +31,12 @@ WORKDIR /root/
 
 # 从编译阶段复制文件
 # 这里使用了阶段索引值，第一个阶段从0开始，如果使用阶段别名则需要写成 COPY --from=build_stage /go/src/app/webserver /
-COPY --from=builder /go/src/app/webserver .
+#COPY --from=builder /go/src/app/webserver .
+COPY --from=builder /go/bin/order /bin/order
 
 # 容器向外提供服务的暴露端口
 EXPOSE 8090
  
 # 启动服务
-ENTRYPOINT ["./webserver"]
+#ENTRYPOINT ["./webserver"]
+ENTRYPOINT ["/bin/order"]

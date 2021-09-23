@@ -2,16 +2,13 @@
  
 # 构建阶段 可指定阶段别名 FROM amd64/golang:latest as build_stage
 # 基础镜像
-FROM golang:latest as build_stage
+FROM golang:1.17-alpine AS builder
 
 # 容器环境变量添加，会覆盖默认的变量值
 ENV GOPROXY=https://goproxy.cn,direct
 ENV GO111MODULE="on"
 ENV GIN_MODE=release
 
-# 作者
-LABEL author="cfanbos"
-LABEL email="haohtml@gmail.com"
 
 # 工作区
 WORKDIR /go/src/app

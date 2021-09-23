@@ -10,7 +10,7 @@ import (
 
 var HttpServer *gin.Engine
 
-//go:embed .env
+//go:embed .env.example
 var BytesContent []byte
 
 type Application interface {

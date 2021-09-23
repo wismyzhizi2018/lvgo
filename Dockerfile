@@ -10,7 +10,7 @@ ENV GO111MODULE="on"
 ENV GIN_MODE=release
 
 # 作者
-LABEL author="cfanbo"
+LABEL author="cfanbos"
 LABEL email="haohtml@gmail.com"
 
 # 工作区

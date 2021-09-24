@@ -40,8 +40,8 @@ func (app *Application) App() {
 	// 必选初始化
 	HttpServer := app.HttpServer
 	//加载配置信息
-	config.InitEmbedData(app.BytesContent)
-	//config.InitNACOS()
+	//config.InitEmbedData(app.BytesContent)
+	config.InitNACOS()
 
 	//获取配置信息
 	serverConfig := config.GetServerConfig()

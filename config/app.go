@@ -69,23 +69,27 @@ func InitNACOS() {
 			color.Danger.Println("Create log file err :", err)
 		}
 	}
+	nacosConf := GetNacosConfig()
 
 	sc := []constant.ServerConfig{
 		{
-			IpAddr: "192.168.0.29",
-			Port:   8848,
+			IpAddr: nacosConf.Endpoint,
+			Port:   nacosConf.Port,
 		},
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         "604ceb84-7811-45f3-9867-63e490131948", // 如果需要支持多namespace，我们可以场景多个client,它们有不同的NamespaceId
-		TimeoutMs:           5000,
+		NamespaceId:         nacosConf.NamespaceId, // 如果需要支持多namespace，我们可以场景多个client,它们有不同的NamespaceId
+		TimeoutMs:           5 * 1000,
 		NotLoadCacheAtStart: true,
 		LogDir:              "tmp/nacos/log",
 		CacheDir:            "tmp/nacos/cache",
+		AccessKey:           nacosConf.AccessKey,
+		SecretKey:           nacosConf.SecretKey,
 		RotateTime:          "1h",
 		MaxAge:              3,
 		LogLevel:            "debug",
+		ListenInterval:      30 * 1000,
 	}
 
 	configClient, err := clients.CreateConfigClient(map[string]interface{}{
@@ -99,8 +103,9 @@ func InitNACOS() {
 	}
 
 	content, err := configClient.GetConfig(vo.ConfigParam{
-		DataId: "app.yaml",
-		Group:  "test"})
+		DataId: nacosConf.DataId,
+		Group:  nacosConf.Group,
+	})
 
 	if err != nil {
 		color.Danger.Println("env read Error = ", err.Error(), "运行中断")

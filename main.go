@@ -3,8 +3,10 @@ package main
 import (
 	_ "embed"
 	"github.com/gin-gonic/gin"
+	"github.com/namsral/flag"
 	"log"
 	"order/bootstrap"
+	"order/config"
 	"os"
 )
 
@@ -33,7 +35,17 @@ func bootstraps(app Application) {
 }
 
 //go:generate goversioninfo -icon=resource/icon.ico -manifest=resource/goversioninfo.exe.manifest
+var endpoint = flag.String("endpoint", "addr-hz-internal.edas.aliyun.com", "nacos endpoint")
+var namespaceId = flag.String("namespace_id", "9be813e2-b734-485e-afb1-24173a33f366", "nacos namespace Id")
+var accessKey = flag.String("access_key", "LTAI4G3ER6msFBtVYLF2wEvR", "nacos access key")
+var secretKey = flag.String("secret_key", "298PGQrCMA8FDKpGSoSscmiNnmg7Q1", "nacos secret key")
+var dataId = flag.String("data_id", "app.yaml", "nacos secret key")
+var group = flag.String("group", "test", "nacos secret key")
+var port = flag.Uint64("port", 8080, "nacos port")
+
 func main() {
+	flag.Parse()
+	config.NewNacosConfig(*endpoint, *namespaceId, *accessKey, *secretKey, *dataId, *group, *port)
 	// 启动服务
 	var app Application = &bootstrap.Application{HttpServer: HttpServer, BytesContent: BytesContent}
 	bootstraps(app)

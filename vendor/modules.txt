@@ -307,6 +307,9 @@ github.com/nacos-group/nacos-sdk-go/inner/uuid
 github.com/nacos-group/nacos-sdk-go/model
 github.com/nacos-group/nacos-sdk-go/util
 github.com/nacos-group/nacos-sdk-go/vo
+# github.com/namsral/flag v1.7.4-pre
+## explicit
+github.com/namsral/flag
 # github.com/opentracing/opentracing-go v1.1.1-0.20190913142402-a7454ce5950e
 ## explicit
 github.com/opentracing/opentracing-go

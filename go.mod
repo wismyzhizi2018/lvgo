@@ -26,6 +26,7 @@ require (
 	github.com/hashicorp/consul/api v1.8.1
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/nacos-group/nacos-sdk-go v1.0.8
+	github.com/namsral/flag v1.7.4-pre
 	github.com/opentracing/opentracing-go v1.1.1-0.20190913142402-a7454ce5950e
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1

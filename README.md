@@ -47,5 +47,5 @@ go get github.com/pilu/fresh
 #### 生成带图标的exe程序
 ```
 go generate
-go build -o younameapp.exe -ldflags="-linkmode internal"
+go build -o younameapp.exe -ldflags="-linkmode internal" 
 ```

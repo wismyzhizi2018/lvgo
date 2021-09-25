@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/xxl-job/xxl-job-executor-go/example/task"
+	"go.uber.org/zap"
+	"io/ioutil"
 	"net/http"
 	"order/app/Libs/Consul"
 	"os"
@@ -30,6 +32,7 @@ import (
 
 type Application struct {
 	HttpServer   *gin.Engine
+	Logger       *zap.Logger
 	BytesContent []byte
 }
 
@@ -40,9 +43,17 @@ func (app *Application) App() {
 	// 必选初始化
 	HttpServer := app.HttpServer
 	//加载配置信息
-	//config.InitEmbedData(app.BytesContent)
-	config.InitNACOS()
-
+	config.InitEmbedData(app.BytesContent)
+	//config.InitNACOS()
+	mainDirectory, _ := os.Getwd()
+	mainDirectory = mainDirectory + "/"
+	bytes, err := ioutil.ReadFile(mainDirectory + "config/banner.txt")
+	if err != nil {
+		nameField := zap.String("name", "banner s ")
+		app.Logger.Fatal("banner error", nameField, zap.Error(err))
+		return
+	}
+	color.Info.Printf("%v\n", string(bytes))
 	//获取配置信息
 	serverConfig := config.GetServerConfig()
 	frameworkConfig := config.GetFrameworkConfig()
@@ -88,7 +99,8 @@ func (app *Application) App() {
 	}
 
 	//启用日志中间件
-	HttpServer.Use(Middlewares.LoggerToFiles())
+	//HttpServer.Use(Middlewares.LoggerToFiles())
+	HttpServer.Use(Middlewares.ZapLoggerToFiles(config.GetLogConfig()))
 
 	// 捕捉接口运行耗时（必须排第一）
 	HttpServer.Use(Middlewares.StatLatency)

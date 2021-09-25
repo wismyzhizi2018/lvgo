@@ -10,6 +10,7 @@ func Info(ctx *gin.Context) {
 	//fmt.Println(Order.GetOrder(orderCode))
 	if flag != true {
 		ctx.JSON(200, gin.H{"error": "user not exists"})
+		return
 	}
 	// 接口返回
 	back := gin.H{

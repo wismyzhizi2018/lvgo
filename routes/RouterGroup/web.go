@@ -37,7 +37,7 @@ func ExampleApi(route *gin.Engine) (apis *gin.RouterGroup) {
 	{
 		user := api.Group("/user/")
 		{
-			base := user.Group("/base/", Middlewares.HttpLimiter(2), Middlewares.CheckLogin, Example.VerifyExample)
+			base := user.Group("/base/", Middlewares.HttpLimiter(2), Example.VerifyExample)
 			{
 				base.POST("info", Base.Info)
 			}

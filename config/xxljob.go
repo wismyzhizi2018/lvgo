@@ -20,7 +20,7 @@ type XXLJobConfig struct {
 
 // GetXXLJobConfig 从 viper 中解析配置信息
 func GetXXLJobConfig() XXLJobConfig {
-	enabled := viper.GetString("JAEGER_ENABLED")
+	enabled := viper.GetString("XXLJOB_ENABLED")
 	addr := viper.GetString("XXLJOB_SERVERADDR")
 	token := viper.GetString("XXLJOB_ACCESSTOKEN")
 	key := viper.GetString("XXLJOB_REGISTRYKEY")

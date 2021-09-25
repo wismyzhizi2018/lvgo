@@ -50,7 +50,7 @@ func GetCheckJwtToken(ctx *gin.Context) {
 
 	//token := strings.TrimSpace(hToken[bearerLength:])
 	//解析token
-	//color.Red.Println(hToken)
+	fmt.Println(hToken)
 	usr, err := JwtParseUser(hToken)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusPreconditionFailed, gin.H{"msg": err.Error()})

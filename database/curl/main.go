@@ -2,26 +2,32 @@ package main
 
 import (
 	"fmt"
+	"github.com/namsral/flag"
 	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
+var list = flag.String("list", "sh000001,sz000423,sh601857", "please input search number")
+
 func main() {
-	logger, _ := zap.NewDevelopment()
-	zap.ReplaceGlobals(logger)
-	zap.S().Infof("this is %s", "我和我的祖国")
-	header := make(map[string]string)
-	header["Authorization"] = "ac1bdd4ce3d8d110af3a7b8ef32bdfa5d76afa4b05d7206c71a99ecfeb97ce74"
-	url := "http://order.api.nantang-tech.com/order/base/get_user_info"
-	req := newget(url, header)
-	fmt.Println(req)
-
-	headers := make(map[string]string)
-	headers["Content-Type"] = "application/json;charset=utf-8"
-
-	res := newget(url, headers)
-	fmt.Println(res)
+	flag.Parse()
+	for {
+		logger, _ := zap.NewDevelopment()
+		zap.ReplaceGlobals(logger)
+		zap.S().Infof("listen is %s", *list)
+		header := make(map[string]string)
+		url := "http://hq.sinajs.cn/list=" + *list
+		req := newget(url, header)
+		fmt.Println(req)
+		time.Sleep(30 * time.Second)
+	}
+	//headers := make(map[string]string)
+	//headers["Content-Type"] = "application/json;charset=utf-8"
+	//
+	//res := newget(url, headers)
+	//fmt.Println(res)
 
 }
 
@@ -40,8 +46,6 @@ func newget(url string, headers map[string]string) string {
 	//add headers
 	if headers != nil {
 		for key, val := range headers {
-			fmt.Println(key)
-			fmt.Println(val)
 			req.Header.Add(key, val)
 		}
 	}

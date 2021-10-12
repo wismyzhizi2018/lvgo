@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var list = flag.String("list", "sh000001,sz000423,sh601857", "please input search number")
+var list = flag.String("list", "sh000001,sz000423,sh601857,sh600884", "please input search number")
 
 func main() {
 	flag.Parse()

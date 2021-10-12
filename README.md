@@ -15,7 +15,7 @@
 ├─config
 ├─database 这个目录下是学习代码
 ├─routes
-│  └─RouterGroup
+│  └─RouterGroup 路由
 ├─service
 ├─storage
 ├─tmp

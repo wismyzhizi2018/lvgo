@@ -29,6 +29,7 @@ require (
 	github.com/namsral/flag v1.7.4-pre
 	github.com/opentracing/opentracing-go v1.1.1-0.20190913142402-a7454ce5950e
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
+	github.com/pdfcpu/pdfcpu v0.3.12
 	github.com/pkg/errors v0.9.1
 	github.com/rpcxio/rpcx-gateway v0.0.0-20210512062600-6dcb6be40a61
 	github.com/satori/go.uuid v1.2.0
@@ -48,6 +49,7 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6 // indirect
 	google.golang.org/genproto v0.0.0-20210820002220-43fce44e7af1 // indirect
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.me/selling-partner-api-sdk v0.0.0-20210707065407-720a4a068b4f
 	gorm.io/driver/mysql v1.1.1
 	gorm.io/gorm v1.21.12

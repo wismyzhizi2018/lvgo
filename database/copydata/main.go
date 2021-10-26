@@ -8,7 +8,9 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"hash/crc32"
 	"log"
+	"math"
 	"os"
 	"strings"
 	"time"
@@ -16,8 +18,10 @@ import (
 
 var orderCode = flag.String("order_code", "", "please input order code")
 var (
-	ProDB *gorm.DB
-	DevDB *gorm.DB
+	ProLogDB *gorm.DB
+	DevLogDB *gorm.DB
+	ProDB    *gorm.DB
+	DevDB    *gorm.DB
 )
 
 type Order_Main struct {
@@ -155,6 +159,33 @@ func (user *OrderProduct) BeforeSave(scope *gorm.DB) (err error) {
 	return nil
 }
 
+type OrderStatusHistory struct {
+	OshId       int    `orm:"osh_id"`
+	OrderCode   string `orm:"order_code"`
+	OshType     string `orm:"osh_type"`
+	OshStatus   string `orm:"osh_status"`
+	LogType     int    `orm:"log_type"`
+	OshComments string `orm:"osh_comments"`
+	OshRemark   string `orm:"osh_remark"`
+	OshIp       string `orm:"osh_ip"`
+	CreateUser  string `orm:"create_user"`
+	CreatedAt   string `orm:"created_at"`
+}
+
+func (user *OrderStatusHistory) BeforeSave(scope *gorm.DB) (err error) {
+	//if pw, err := bcrypt.GenerateFromPassword(user.Password, 0); err == nil {
+	user.CreatedAt = timeToData(GetTimestamp(user.CreatedAt))
+	//fmt.Println(user)
+	return nil
+}
+
+func getTableName(OrderCode string) string {
+	codeint := crc32.ChecksumIEEE([]byte(OrderCode))
+	prefix := math.Mod(float64(codeint), 300)
+	//	fmt.Println(prefix)
+	return "order_status_history_" + fmt.Sprintf("%03d", int(prefix))
+}
+
 type MysqlConfig struct {
 	Host     string `mapstructure:"host" orm:"host"`
 	Port     int    `mapstructure:"port" orm:"port"`
@@ -176,14 +207,21 @@ func main() {
 	}
 	zap.S().Infof("初始化数据库[%s]", "ProDB")
 	initProDatabase()
+	initProLogDatabase()
 	zap.S().Infof("初始化数据库[%s]", "DevDB")
 	initTestDatabase()
+	initTestLogDatabase()
 	zap.S().Infof("开始数据迁移[%s]", time.Now().Format("2006-01-02 15:04:05"))
 
 	orderCodeArr := strings.Split(*orderCode, ",")
 	for _, v := range orderCodeArr {
 		var orderInfo Order_Main
 		var orderProductInfo []OrderProduct
+		var orderLogInfo []OrderStatusHistory
+		if result := ProLogDB.Table(getTableName(v)).Where(map[string]interface{}{"order_code": v}).Find(&orderLogInfo); result.RowsAffected == 0 {
+			zap.S().Infof("订单日志信息[%s]不存在", v)
+			os.Exit(200)
+		}
 		if result := ProDB.Where(map[string]interface{}{"order_code": v}).First(&orderInfo); result.RowsAffected == 0 {
 			zap.S().Infof("订单信息[%s]不存在", v)
 			os.Exit(200)
@@ -205,6 +243,12 @@ func main() {
 		} else {
 			zap.S().Infof("复制订单行信息[%s]成功,已经存在", v)
 		}
+
+		if result := DevLogDB.Table(getTableName(v)).Save(&orderLogInfo); result.RowsAffected != 0 {
+			zap.S().Infof("复制订单日志信息[%s]成功", v)
+		} else {
+			zap.S().Infof("复制订单日志信息[%s]成功,已经存在", v)
+		}
 	}
 
 	zap.S().Infof("结束数据迁移[%s]", time.Now().Format("2006-01-02 15:04:05"))
@@ -213,11 +257,11 @@ func main() {
 
 func initProDatabase() {
 	c := MysqlConfig{
-		Host:     "XXXXX",
+		Host:     "XXXXXXXXXXXX",
 		Port:     3306,
-		Name:     "XXXX",
-		User:     "XXXX",
-		Password: "XXXXXXXXXXXXXX",
+		Name:     "nt_order",
+		User:     "nt_order",
+		Password: "XXXXXXXXXXXXX",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -245,11 +289,11 @@ func initProDatabase() {
 
 func initTestDatabase() {
 	c := MysqlConfig{
-		Host:     "XXXXX",
+		Host:     "XXXXXXXXXXXX",
 		Port:     3311,
-		Name:     "XXXXX",
-		User:     "XXXX",
-		Password: "XXXXXXXXXXXXXXX",
+		Name:     "nt_order",
+		User:     "test",
+		Password: "XXXXXXXXXXXXX",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -279,4 +323,69 @@ func GetTimestamp(change string) int64 {
 	times, _ := time.Parse("2006-01-02 15:04:05", change)
 	timeUnix := times.Unix()
 	return timeUnix
+}
+
+func initProLogDatabase() {
+	c := MysqlConfig{
+		Host:     "XXXXXXXXXXXX",
+		Port:     3306,
+		Name:     "nt_order_log",
+		User:     "nt_order",
+		Password: "XXXXXXXXXXXXX",
+	}
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		c.User, c.Password, c.Host, c.Port, c.Name)
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold: time.Second,  // 慢 SQL 阈值
+			LogLevel:      logger.Error, // Log level
+			Colorful:      false,        // 禁用彩色打印
+		},
+	)
+
+	// 全局模式
+	var err error
+	ProLogDB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+		Logger: newLogger,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func initTestLogDatabase() {
+	c := MysqlConfig{
+		Host:     "XXXXXXXXXXXX",
+		Port:     3311,
+		Name:     "nt_order_log",
+		User:     "test",
+		Password: "XXXXXXXXXXXXX",
+	}
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		c.User, c.Password, c.Host, c.Port, c.Name)
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold: time.Second,  // 慢 SQL 阈值
+			LogLevel:      logger.Error, // Log level
+			Colorful:      false,        // 禁用彩色打印
+		},
+	)
+
+	// 全局模式
+	var err error
+	DevLogDB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+		Logger: newLogger,
+	})
+	if err != nil {
+		panic(err)
+	}
+	//DevDB.Callback().Create().Replace("orm:updated_at", updateTimeStampForUpdateCallback)
 }

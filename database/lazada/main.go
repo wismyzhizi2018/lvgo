@@ -300,9 +300,9 @@ func pushLazadaGetOrderItems(AccessToken string, OrderId int64, Country string, 
 	out := &OutOrderInfo{}
 	if AccessToken != "" {
 		api := lazadago.NewApi(&lazadaConfig.Config{
-			AppKey:      "120393",
+			AppKey:      "xxxx",
 			AccessToken: AccessToken, //刚开始可以为空字符串
-			AppSecret:   "ZNrsxLeiZwEtE2l52CR3sTEcETVxcPut",
+			AppSecret:   "xxxx",
 			Country:     Country,
 		})
 		order := api.GetOrderItems(OrderId)
@@ -334,11 +334,11 @@ func pushLazadaGetOrderItems(AccessToken string, OrderId int64, Country string, 
 
 func initProLazadaDatabase() {
 	c := MysqlConfig{
-		Host:     "139.196.4.63",
+		Host:     "xxxx",
 		Port:     3306,
-		Name:     "nt_lazada_listing",
-		User:     "qianxiaosong",
-		Password: "ChSrVp3RazTnVesI",
+		Name:     "xxxx",
+		User:     "xxxx",
+		Password: "xxxx",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -366,11 +366,11 @@ func initProLazadaDatabase() {
 
 func initProDatabase() {
 	c := MysqlConfig{
-		Host:     "101.132.43.121",
+		Host:     "xxxx",
 		Port:     3306,
-		Name:     "nt_order",
-		User:     "nt_order",
-		Password: "8Iwi+GEimp3cmwEphIVe",
+		Name:     "xxxx",
+		User:     "xxxx",
+		Password: "xxxx",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)

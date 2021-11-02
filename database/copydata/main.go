@@ -257,11 +257,11 @@ func main() {
 
 func initProDatabase() {
 	c := MysqlConfig{
-		Host:     "101.132.43.121",
+		Host:     "xxxx",
 		Port:     3306,
-		Name:     "nt_order",
-		User:     "nt_order",
-		Password: "8Iwi+GEimp3cmwEphIVe",
+		Name:     "xxxx",
+		User:     "xxxx",
+		Password: "xxxx",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -289,11 +289,11 @@ func initProDatabase() {
 
 func initTestDatabase() {
 	c := MysqlConfig{
-		Host:     "192.168.0.252",
+		Host:     "xxxx",
 		Port:     3311,
-		Name:     "nt_order",
-		User:     "test",
-		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
+		Name:     "xxxx",
+		User:     "xxxx",
+		Password: "xxxx",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -329,11 +329,11 @@ func GetTimestamp(change string) int64 {
 
 func initProLogDatabase() {
 	c := MysqlConfig{
-		Host:     "101.132.43.121",
+		Host:     "xxxx",
 		Port:     3306,
-		Name:     "nt_order_log",
-		User:     "nt_order",
-		Password: "8Iwi+GEimp3cmwEphIVe",
+		Name:     "xxxx",
+		User:     "xxxx",
+		Password: "xxxx",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -361,11 +361,11 @@ func initProLogDatabase() {
 
 func initTestLogDatabase() {
 	c := MysqlConfig{
-		Host:     "192.168.0.252",
+		Host:     "xxxx",
 		Port:     3311,
-		Name:     "nt_order_log",
-		User:     "test",
-		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
+		Name:     "xxxx",
+		User:     "xxxx",
+		Password: "xxxx",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)

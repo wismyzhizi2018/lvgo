@@ -162,6 +162,10 @@ type OutOrderInfo struct {
 	OrderProduct   []OutOrderProductInfo `json:"order_product"`
 }
 
+type RequestJonInfo struct {
+	OrderCode []interface{} `json:"order_code"`
+}
+
 func (g OutOrderInfo) String() string {
 	return lib.ObjectToString(g)
 }
@@ -176,10 +180,16 @@ func main() {
 	zap.ReplaceGlobals(logger)
 	r.POST("/api/order/status_info", func(ctx *gin.Context) {
 		//获取所有token信息
-		orderIds, _ := ctx.GetPostFormArray("order_code")
-		//for _, orderCode := range orderIds {
-		//	color.Info.Println(orderCode)
-		//}
+		//orderIds, _ := ctx.GetPostFormArray("order_code")
+
+		var json RequestJonInfo
+		ctx.BindJSON(&json)
+		fmt.Println(json)
+		//	orderIds := json.OrderCode
+		var orderIds []string
+		for _, orderCode := range json.OrderCode {
+			orderIds = append(orderIds, fmt.Sprintf("%v", orderCode))
+		}
 		//查询所有
 		var orderInfo []Order_Main
 		var accountInfo []LazadaAccount
@@ -195,24 +205,26 @@ func main() {
 			return
 		}
 		var outInfo []*OutOrderInfo
-		//done := make(chan bool) //通道
-		var wg sync.WaitGroup
-		ch := make(chan string)
 
-		//go func() {
-		//	for {
-		//		job, ok := <-jobs
-		//		//fmt.Printf("ok的类型为%T\n",ok) //ok的类型为bool 当通道关闭ok的类型为false
-		//		if ok {
-		//			wg.Add(1)
-		//			fmt.Println("收到工作", job.OrderId)
-		//			go job.lazadaGetOrderItems(wg)
-		//		} else {
-		//			fmt.Println("收到全部工作结果")
-		//			done <- true //其实这里放true和false都无所谓
-		//		}
-		//	}
-		//}()
+		//done := make(chan bool) //通道
+
+		//执行的 这里要注意  需要指针类型传入  否则会异常
+		wg := &sync.WaitGroup{}
+		//并发控制 10
+		limiter := make(chan bool, 20)
+		defer close(limiter)
+
+		response := make(chan *OutOrderInfo, 20)
+		wgResponse := &sync.WaitGroup{}
+		//var result []string
+		//处理结果 接收结果
+		go func() {
+			wgResponse.Add(1)
+			for rc := range response {
+				outInfo = append(outInfo, rc)
+			}
+			wgResponse.Done()
+		}()
 		for _, orderRow := range orderInfo {
 			var outRow OutOrderInfo
 			var token string
@@ -236,16 +248,24 @@ func main() {
 				outRow.OrderProduct = append(outRow.OrderProduct, outOpRow)
 			}
 			orderId, _ := strconv.ParseInt(orderRow.StoreOrderCode, 10, 64)
+			//计数器
 			wg.Add(1)
-			cmd := &LazadaInfo{AccessToken: token, OrderId: orderId, Country: country, OutInfo: outRow, Wg: &wg, Ch: ch}
-			go cmd.pushLazadaGetOrderItems()
+			//	cmd := &LazadaInfo{AccessToken: token, OrderId: orderId, Country: country, OutInfo: outRow, Wg: &wg, Ch: ch}
+			//并发控制 20
+			limiter <- true
+			//发送请求
+			go pushLazadaGetOrderItems(token, orderId, country, outRow, wg, response, limiter)
 			//go cmd.getLazadaGetOrderItems()
-
 		}
-		fmt.Println("发送完毕")
 		//}
+		//发送任务
 		wg.Wait()
-		//fmt.Println("结束1111111111111")
+		//fmt.Println("发送完毕")
+		close(response) //关闭 并不影响接收遍历
+		//处理接收结果
+		wgResponse.Wait()
+		//fmt.Println("请求结束")
+		//fmt.Println(result)
 		//outInfo = append(outInfo, <-lazadaInfo)
 		util.SuccessJson("请求成功", outInfo)(ctx)
 		return
@@ -270,17 +290,19 @@ type LazadaInfo struct {
 func (_this *LazadaInfo) getLazadaGetOrderItems() {
 	color.Danger.Println(<-_this.Ch)
 }
-func (_this *LazadaInfo) pushLazadaGetOrderItems() {
-	AccessToken := _this.AccessToken
-	OrderId := _this.OrderId
-	Country := _this.Country
-	OutInfo := _this.OutInfo
+func pushLazadaGetOrderItems(AccessToken string, OrderId int64, Country string, OutInfo OutOrderInfo, Wg *sync.WaitGroup, response chan *OutOrderInfo, limiter chan bool) {
+	//计数器-1
+	defer Wg.Done()
+	//AccessToken := _this.AccessToken
+	//OrderId := _this.OrderId
+	//Country := _this.Country
+	//OutInfo := _this.OutInfo
 	out := &OutOrderInfo{}
 	if AccessToken != "" {
 		api := lazadago.NewApi(&lazadaConfig.Config{
-			AppKey:      "xxxx",
+			AppKey:      "120393",
 			AccessToken: AccessToken, //刚开始可以为空字符串
-			AppSecret:   "xxxx",
+			AppSecret:   "ZNrsxLeiZwEtE2l52CR3sTEcETVxcPut",
 			Country:     Country,
 		})
 		order := api.GetOrderItems(OrderId)
@@ -298,21 +320,25 @@ func (_this *LazadaInfo) pushLazadaGetOrderItems() {
 				}
 				out.OrderProduct = append(out.OrderProduct, opItem)
 			}
-			zap.S().Infof("%s", out)
+			//zap.S().Infof("%s", out)
 		} else {
-			zap.S().Infof("%s", out)
+			//zap.S().Infof("%s", out)
 		}
+		//结果数据传入管道
+		//response <- fmt.Sprintf("%s", out)
+		response <- out
 	}
-	defer _this.Wg.Done()
+	//释放一个并发
+	<-limiter
 }
 
 func initProLazadaDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "139.196.4.63",
 		Port:     3306,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_lazada_listing",
+		User:     "qianxiaosong",
+		Password: "ChSrVp3RazTnVesI",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -340,11 +366,11 @@ func initProLazadaDatabase() {
 
 func initProDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "101.132.43.121",
 		Port:     3306,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order",
+		User:     "nt_order",
+		Password: "8Iwi+GEimp3cmwEphIVe",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)

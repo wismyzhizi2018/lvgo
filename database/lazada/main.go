@@ -244,7 +244,7 @@ func main() {
 				outOpRow.OrderCode = opItem.OrderCode
 				outOpRow.ProductID = opItem.ProductID
 				outOpRow.StoreOrderItemID = opItem.StoreOrderItemID
-				outOpRow.StoreOpStatus = "cancel"
+				outOpRow.StoreOpStatus = ""
 				outRow.OrderProduct = append(outRow.OrderProduct, outOpRow)
 			}
 			orderId, _ := strconv.ParseInt(orderRow.StoreOrderCode, 10, 64)
@@ -327,6 +327,8 @@ func pushLazadaGetOrderItems(AccessToken string, OrderId int64, Country string, 
 		//结果数据传入管道
 		//response <- fmt.Sprintf("%s", out)
 		response <- out
+	} else {
+		response <- &OutInfo
 	}
 	//释放一个并发
 	<-limiter

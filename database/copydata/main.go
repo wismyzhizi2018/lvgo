@@ -257,11 +257,11 @@ func main() {
 
 func initProDatabase() {
 	c := MysqlConfig{
-		Host:     "XXXXXXXXXXXX",
+		Host:     "101.132.43.121",
 		Port:     3306,
 		Name:     "nt_order",
 		User:     "nt_order",
-		Password: "XXXXXXXXXXXXX",
+		Password: "8Iwi+GEimp3cmwEphIVe",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -289,11 +289,11 @@ func initProDatabase() {
 
 func initTestDatabase() {
 	c := MysqlConfig{
-		Host:     "XXXXXXXXXXXX",
+		Host:     "192.168.0.252",
 		Port:     3311,
 		Name:     "nt_order",
 		User:     "test",
-		Password: "XXXXXXXXXXXXX",
+		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -320,18 +320,20 @@ func initTestDatabase() {
 	//DevDB.Callback().Create().Replace("orm:updated_at", updateTimeStampForUpdateCallback)
 }
 func GetTimestamp(change string) int64 {
-	times, _ := time.Parse("2006-01-02 15:04:05", change)
+	change1 := strings.Replace(change, "T", " ", 1)
+	change2 := strings.Replace(change1, "+08:00", "", 1)
+	times, _ := time.Parse("2006-01-02 15:04:05", change2)
 	timeUnix := times.Unix()
-	return timeUnix
+	return timeUnix - 8*3600
 }
 
 func initProLogDatabase() {
 	c := MysqlConfig{
-		Host:     "XXXXXXXXXXXX",
+		Host:     "101.132.43.121",
 		Port:     3306,
 		Name:     "nt_order_log",
 		User:     "nt_order",
-		Password: "XXXXXXXXXXXXX",
+		Password: "8Iwi+GEimp3cmwEphIVe",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -359,11 +361,11 @@ func initProLogDatabase() {
 
 func initTestLogDatabase() {
 	c := MysqlConfig{
-		Host:     "XXXXXXXXXXXX",
+		Host:     "192.168.0.252",
 		Port:     3311,
 		Name:     "nt_order_log",
 		User:     "test",
-		Password: "XXXXXXXXXXXXX",
+		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)

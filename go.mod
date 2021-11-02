@@ -40,6 +40,8 @@ require (
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	github.com/urfave/cli/v2 v2.3.0
+	github.com/wjpxxx/lazadago v0.0.2
+	github.com/wjpxxx/letgo v0.0.69 // indirect
 	github.com/xxl-job/xxl-job-executor-go v1.0.1
 	go.mongodb.org/mongo-driver v1.7.0
 	go.uber.org/zap v1.17.0

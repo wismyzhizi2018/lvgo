@@ -211,7 +211,7 @@ func main() {
 		//执行的 这里要注意  需要指针类型传入  否则会异常
 		wg := &sync.WaitGroup{}
 		//并发控制 10
-		limiter := make(chan bool, 20)
+		limiter := make(chan struct{}, 20)
 		defer close(limiter)
 
 		response := make(chan *OutOrderInfo, 20)
@@ -252,7 +252,7 @@ func main() {
 			wg.Add(1)
 			//	cmd := &LazadaInfo{AccessToken: token, OrderId: orderId, Country: country, OutInfo: outRow, Wg: &wg, Ch: ch}
 			//并发控制 20
-			limiter <- true
+			limiter <- struct{}{}
 			//发送请求
 			go pushLazadaGetOrderItems(token, orderId, country, outRow, wg, response, limiter)
 			//go cmd.getLazadaGetOrderItems()
@@ -290,7 +290,7 @@ type LazadaInfo struct {
 func (_this *LazadaInfo) getLazadaGetOrderItems() {
 	color.Danger.Println(<-_this.Ch)
 }
-func pushLazadaGetOrderItems(AccessToken string, OrderId int64, Country string, OutInfo OutOrderInfo, Wg *sync.WaitGroup, response chan *OutOrderInfo, limiter chan bool) {
+func pushLazadaGetOrderItems(AccessToken string, OrderId int64, Country string, OutInfo OutOrderInfo, Wg *sync.WaitGroup, response chan *OutOrderInfo, limiter chan struct{}) {
 	//计数器-1
 	defer Wg.Done()
 	//AccessToken := _this.AccessToken

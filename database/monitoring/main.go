@@ -2,6 +2,9 @@ package main
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"github.com/CodyGuo/dingtalk"
 	"github.com/golang/glog"
@@ -63,6 +66,85 @@ func GetNacosConfig() NacosConfig {
 	return nacos
 }
 
+type MyCircularQueue struct {
+	Head, Tail   int
+	Queue        []string
+	Length, size int
+}
+
+func Constructor(k int) MyCircularQueue {
+	return MyCircularQueue{
+		Head:   0,
+		Tail:   0,
+		Queue:  make([]string, k+1, k+1),
+		Length: 0,
+		size:   k + 1,
+	}
+}
+
+func (this *MyCircularQueue) EnQueue(value string) bool {
+	if this.IsFull() {
+		return false
+	}
+	this.Queue[this.Tail] = value
+	this.Tail = (this.Tail + 1 + this.size) % this.size
+	this.Length += 1
+	return true
+}
+
+func (this *MyCircularQueue) DeQueue() bool {
+	if this.IsEmpty() {
+		return false
+	}
+	this.Head = (this.Head + 1 + this.size) % this.size
+	this.Length -= 1
+	return true
+}
+
+func (this *MyCircularQueue) Front() string {
+	if this.IsEmpty() {
+		return "-1"
+	}
+	return this.Queue[this.Head]
+}
+
+func (this *MyCircularQueue) Rear() string {
+	if this.IsEmpty() {
+		return "-1"
+	}
+	return this.Queue[(this.Tail-1+this.size)%this.size]
+}
+
+func (this *MyCircularQueue) IsEmpty() bool {
+	return this.Head == this.Tail
+}
+
+func (this *MyCircularQueue) IsFull() bool {
+	if (this.Tail+1)%this.size == this.Head {
+		return true
+	}
+	return false
+}
+func (this *MyCircularQueue) IsExists(key string) bool {
+	for _, v := range this.Queue {
+		//fmt.Println(v)
+		if v == key {
+			return true
+		}
+	}
+	return false
+}
+
+func (this *MyCircularQueue) push(key string) bool {
+	if this.IsFull() {
+		this.DeQueue()
+		return this.EnQueue(key)
+	} else {
+		return this.EnQueue(key)
+	}
+	return true
+}
+
 //go:generate goversioninfo -icon=resource/icon.ico -manifest=resource/goversioninfo.exe.manifest
 var endpoint = flag.String("endpoint", "<point>", "nacos endpoint")
 var namespaceId = flag.String("namespace_id", "<namespace_id>", "nacos namespace Id")
@@ -94,10 +176,11 @@ func main() {
 	}
 
 	cron2 := cron.New() //创建一个cron实例
+	queueObject := Constructor(10)
 	//执行定时任务（每5秒执行一次）
 	err := cron2.AddFunc("*/5 * * * * *", func() {
 		//
-		var content = []Config{}
+		var content []Config
 		for _, item := range c.Config {
 			if ok, _ := Exists(item.Path); ok {
 				nowTime := time.Now().Unix()
@@ -118,6 +201,7 @@ func main() {
 			header := make(map[string]string)
 			header["Content-Type"] = "application/json;charset=utf-8"
 			var bt bytes.Buffer
+			var cachekey string
 			for _, v := range content {
 				txt := ""
 				txt += "------------------------\n\n"
@@ -127,18 +211,22 @@ func main() {
 				txt += fmt.Sprintf(" **监控文件：** %s\n\n", v.Path)
 				txt += fmt.Sprintf(" **文件时间：** %s\n\n", v.LastTime)
 				txt += fmt.Sprintf(" **当前时间：** %s\n\n", v.NowTime)
-
+				cachekey += fmt.Sprintf(" **监控时差：** %v秒\n\n", v.Time) + fmt.Sprintf(" **监控名称：** %s\n\n", v.Name) + fmt.Sprintf(" **文件时间：** %s\n\n", v.LastTime) + fmt.Sprintf(" **监控文件：** %s\n\n", v.Path) + fmt.Sprintf(" **当前时间：** %v\n\n", time.Now().Day())
+				//fmt.Println(cachekey)
 				bt.WriteString(txt)
 			}
-
-			secret := c.Ding.Secretkey
-			webHook := c.Ding.Webhook
-			// markdown类型
-			dt := dingtalk.New(webHook, dingtalk.WithSecret(secret))
-			markdownTitle := "日志监控通知"
-			markdownText := bt.String()
-			if err := dt.RobotSendMarkdown(markdownTitle, markdownText); err != nil {
-				glog.Fatal(err)
+			key := hmacSha256(cachekey, c.Ding.Secretkey)
+			if queueObject.IsExists(key) == false {
+				secret := c.Ding.Secretkey
+				webHook := c.Ding.Webhook
+				// markdown类型
+				dt := dingtalk.New(webHook, dingtalk.WithSecret(secret))
+				markdownTitle := "日志监控通知"
+				markdownText := bt.String()
+				if err := dt.RobotSendMarkdown(markdownTitle, markdownText); err != nil {
+					glog.Fatal(err)
+				}
+				queueObject.push(key)
 			}
 		}
 	})
@@ -311,4 +399,10 @@ func InitNACOS() {
 			}
 		}
 	}()
+}
+
+func hmacSha256(data string, secret string) string {
+	h := hmac.New(sha256.New, []byte(secret))
+	h.Write([]byte(data))
+	return hex.EncodeToString(h.Sum(nil))
 }

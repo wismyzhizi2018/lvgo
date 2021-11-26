@@ -5,13 +5,13 @@ config:
   - name: MergeOrder
     time: 10800
     desc: 订单合并
-    path: D:\code\nt_order\storage\logs\MergeOrder.log
+    path: /php/storage/logs/MergeOrder.log
 
   #sort 订单监控
   - name: SortOrder
     time: 3600
-    desc: 订单派单
-    path: /php/storage/logs/SortOrder.log
+    desc: 订单派单-1
+    path: /php/storage/logs/batchSortOrder__groupId_groupid1.log
 ding:
  webhook: https://oapi.dingtalk.com/robot/send?access_token=e180d55d99d061d36692469e372fa7aa3253003371d467b140a04cfe52467cdd
  secretkey: SEC26bf14e03f6a8ec4cea22e4a3dd9f70e5233dbf9718ec0761874b91316aae686

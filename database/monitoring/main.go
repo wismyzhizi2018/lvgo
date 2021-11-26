@@ -248,4 +248,40 @@ func InitNACOS() {
 	if err := viper.Unmarshal(&c); err != nil {
 		panic(err)
 	}
+	go func() {
+		for {
+			err := configClient.ListenConfig(vo.ConfigParam{
+				DataId: nacosConf.DataId,
+				Group:  nacosConf.Group,
+				OnChange: func(namespace, group, dataId, data string) {
+					//fmt.Println("group:" + group + ", dataId:" + dataId + ", data:" + data)
+					content, err := configClient.GetConfig(vo.ConfigParam{
+						DataId: nacosConf.DataId,
+						Group:  nacosConf.Group,
+					})
+					if err != nil {
+						color.Danger.Println("env read Error = ", err.Error(), "运行中断")
+						fmt.Println(err.Error())
+						os.Exit(200)
+					}
+					color.Info.Println(content) //字符串 - yaml
+					color.Debug.Println("使用NACOS加载配置文件")
+					viper.SetConfigType("yaml")
+					//读取
+					if err := viper.ReadConfig(bytes.NewBuffer([]byte(content))); err != nil {
+						color.Danger.Println("env read Error = ", err.Error(), "运行中断")
+						fmt.Println(err.Error())
+						os.Exit(200)
+					}
+
+					if err := viper.Unmarshal(&c); err != nil {
+						panic(err)
+					}
+				},
+			})
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+	}()
 }

@@ -1,5 +1,9 @@
 version: 2
-
+#需要监控日志文件配置
+#name 是监控文件名称
+#time 是监控时间差 即当前时间-最后文件修改时间 大于 time时间就发通知
+#desc 是监控说明
+#path 是服务器监控的绝对路径
 config:
   #合并订单监控
   - name: MergeOrder
@@ -12,6 +16,13 @@ config:
     time: 3600
     desc: 订单派单-1
     path: /php/storage/logs/batchSortOrder__groupId_groupid1.log
+  - name: SortOrder-2
+    time: 3600
+    desc: 订单派单-2
+    path: /php/storage/logs/batchSortOrder__groupId_groupid2.log
+#符合监控条件的钉钉配置
+#webhook   是钉钉的推送地址
+#secretkey 是钉钉机的密钥
 ding:
- webhook: https://oapi.dingtalk.com/robot/send?access_token=e180d55d99d061d36692469e372fa7aa3253003371d467b140a04cfe52467cdd
- secretkey: SEC26bf14e03f6a8ec4cea22e4a3dd9f70e5233dbf9718ec0761874b91316aae686
+  webhook: https://oapi.dingtalk.com/robot/send?access_token=e180d55d99d061d36692469e372fa7aa3253003371d467b140a04cfe52467cdd
+  secretkey: SEC26bf14e03f6a8ec4cea22e4a3dd9f70e5233dbf9718ec0761874b91316aae686

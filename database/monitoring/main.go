@@ -12,7 +12,6 @@ import (
 	"github.com/namsral/flag"
 	"github.com/robfig/cron"
 	"github.com/spf13/viper"
-	"order/config"
 	"os"
 	"path"
 	"time"
@@ -36,6 +35,34 @@ type Config struct {
 	NowTime  string `yaml:"now"`
 }
 
+var nacos NacosConfig
+
+type NacosConfig struct {
+	Endpoint    string
+	NamespaceId string
+	AccessKey   string
+	SecretKey   string
+	Port        uint64
+	DataId      string
+	Group       string
+}
+
+// NewNacosConfig 从 viper 中解析配置信息
+func NewNacosConfig(endpoint, namespaceId, accessKey, secretKey, dataId, group string, port uint64) NacosConfig {
+	nacos.Endpoint = endpoint
+	nacos.NamespaceId = namespaceId
+	nacos.AccessKey = accessKey
+	nacos.SecretKey = secretKey
+	nacos.DataId = dataId
+	nacos.Group = group
+	nacos.Port = port
+	return nacos
+}
+
+func GetNacosConfig() NacosConfig {
+	return nacos
+}
+
 //go:generate goversioninfo -icon=resource/icon.ico -manifest=resource/goversioninfo.exe.manifest
 var endpoint = flag.String("endpoint", "<point>", "nacos endpoint")
 var namespaceId = flag.String("namespace_id", "<namespace_id>", "nacos namespace Id")
@@ -48,7 +75,7 @@ var c YamlConfig
 
 func main() {
 	flag.Parse()
-	config.NewNacosConfig(*endpoint, *namespaceId, *accessKey, *secretKey, *dataId, *group, *port)
+	NewNacosConfig(*endpoint, *namespaceId, *accessKey, *secretKey, *dataId, *group, *port)
 	if *namespaceId != "<namespace_id>" {
 		InitNACOS()
 	} else {
@@ -192,7 +219,7 @@ func InitNACOS() {
 			color.Danger.Println("Create log file err :", err)
 		}
 	}
-	nacosConf := config.GetNacosConfig()
+	nacosConf := GetNacosConfig()
 
 	sc := []constant.ServerConfig{
 		{

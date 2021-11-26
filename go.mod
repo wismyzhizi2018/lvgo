@@ -3,7 +3,9 @@ module order
 go 1.16
 
 require (
+	github.com/CodyGuo/dingtalk v0.0.3
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
+	github.com/alibabacloud-go/dingtalk v1.2.3 // indirect
 	github.com/apache/rocketmq-client-go v1.2.4 // indirect
 	github.com/apache/rocketmq-client-go/v2 v2.1.0
 	github.com/arl/statsviz v0.4.0
@@ -19,6 +21,7 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/go-redis/redis/v8 v8.11.0
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/uuid v1.1.4
 	github.com/google/wire v0.5.0
 	github.com/gookit/color v1.4.2
@@ -31,6 +34,8 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pdfcpu/pdfcpu v0.3.12
 	github.com/pkg/errors v0.9.1
+	github.com/robfig/cron v1.2.0
+	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/rpcxio/rpcx-gateway v0.0.0-20210512062600-6dcb6be40a61
 	github.com/satori/go.uuid v1.2.0
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
@@ -41,7 +46,7 @@ require (
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/wjpxxx/lazadago v0.0.2
-	github.com/wjpxxx/letgo v0.0.69 // indirect
+	github.com/wjpxxx/letgo v0.0.69
 	github.com/xxl-job/xxl-job-executor-go v1.0.1
 	go.mongodb.org/mongo-driver v1.7.0
 	go.uber.org/zap v1.17.0

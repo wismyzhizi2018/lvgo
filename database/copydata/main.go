@@ -106,6 +106,7 @@ type Order_Main struct {
 	OtherFee                string `orm:"other_fee"`
 	ShippingCharge          string `orm:"shipping_charge"`
 	VoucherPlatform         string `orm:"voucher_platform"`
+	OverTimeLeft            string `orm:"over_time_left"`
 }
 
 func (user *Order_Main) BeforeSave(scope *gorm.DB) (err error) {
@@ -118,6 +119,7 @@ func (user *Order_Main) BeforeSave(scope *gorm.DB) (err error) {
 	user.ShipDate = timeToData(GetTimestamp(user.ShipDate))
 	user.UpdateTrackTime = timeToData(GetTimestamp(user.UpdateTrackTime))
 	user.UpdateFollowTime = timeToData(GetTimestamp(user.UpdateFollowTime))
+	user.OverTimeLeft = timeToData(GetTimestamp(user.OverTimeLeft))
 	//fmt.Println(user)
 	return nil
 }

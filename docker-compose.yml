@@ -12,4 +12,5 @@ services:
     volumes:
       - /www/wwwroot/go/order/storage/logs:/www/wwwroot/go/order/storage/logs:rw
     networks:
+      -
       - basic

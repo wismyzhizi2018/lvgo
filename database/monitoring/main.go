@@ -41,10 +41,10 @@ type Config struct {
 var nacos NacosConfig
 
 type NacosConfig struct {
-	Endpoint    string
+	HOST        string
 	NamespaceId string
-	AccessKey   string
-	SecretKey   string
+	Username    string
+	Password    string
 	Port        uint64
 	DataId      string
 	Group       string
@@ -52,10 +52,10 @@ type NacosConfig struct {
 
 // NewNacosConfig 从 viper 中解析配置信息
 func NewNacosConfig(endpoint, namespaceId, accessKey, secretKey, dataId, group string, port uint64) NacosConfig {
-	nacos.Endpoint = endpoint
+	nacos.HOST = endpoint
 	nacos.NamespaceId = namespaceId
-	nacos.AccessKey = accessKey
-	nacos.SecretKey = secretKey
+	nacos.Username = accessKey
+	nacos.Password = secretKey
 	nacos.DataId = dataId
 	nacos.Group = group
 	nacos.Port = port
@@ -146,13 +146,13 @@ func (this *MyCircularQueue) push(key string) bool {
 }
 
 //go:generate goversioninfo -icon=resource/icon.ico -manifest=resource/goversioninfo.exe.manifest
-var endpoint = flag.String("endpoint", "<point>", "nacos endpoint")
+var endpoint = flag.String("host", "config.nantang-tech.com", "nacos host")
 var namespaceId = flag.String("namespace_id", "<namespace_id>", "nacos namespace Id")
-var accessKey = flag.String("access_key", "nacos", "nacos access key")
-var secretKey = flag.String("secret_key", "nacos", "nacos secret key")
+var accessKey = flag.String("username", "", "nacos access username")
+var secretKey = flag.String("password", "", "nacos secret password")
 var dataId = flag.String("data_id", "order-config.yaml", "nacos secret key")
-var group = flag.String("group", "dev", "nacos secret key")
-var port = flag.Uint64("port", 8848, "nacos port")
+var group = flag.String("group", "production", "nacos secret key")
+var port = flag.Uint64("port", 80, "nacos port")
 var c YamlConfig
 
 func main() {
@@ -308,32 +308,43 @@ func InitNACOS() {
 		}
 	}
 	nacosConf := GetNacosConfig()
+	fmt.Println(nacosConf)
+	// 创建serverConfig的另一种方式
+	serverConfigs := []constant.ServerConfig{
+		*constant.NewServerConfig(
+			nacosConf.HOST,
+			nacosConf.Port,
+			constant.WithScheme("http"),
+			constant.WithContextPath("/nacos"),
+		),
+		//*constant.NewServerConfig(
+		//	"console2.nacos.io",
+		//	80,
+		//	constant.WithScheme("http"),
+		//	constant.WithContextPath("/nacos")
+		//),
+	}
+	// 创建clientConfig的另一种方式
+	clientConfig := *constant.NewClientConfig(
+		constant.WithNamespaceId("7bbe2bee-9157-43e1-9b9c-2e19b0a102a6"), //当namespace是public时，此处填空字符串。
+		constant.WithTimeoutMs(5000),
+		constant.WithNotLoadCacheAtStart(true),
+		constant.WithLogDir("/tmp/nacos/log"),
+		constant.WithCacheDir("/tmp/nacos/cache"),
+		constant.WithRotateTime("1h"),
+		constant.WithMaxAge(3),
+		constant.WithLogLevel("debug"),
+		constant.WithUsername(nacosConf.Username),
+		constant.WithPassword(nacosConf.Password),
+	)
 
-	sc := []constant.ServerConfig{
-		{
-			IpAddr: nacosConf.Endpoint,
-			Port:   nacosConf.Port,
+	// 创建动态配置客户端的另一种方式 (推荐)
+	configClient, err := clients.NewConfigClient(
+		vo.NacosClientParam{
+			ClientConfig:  &clientConfig,
+			ServerConfigs: serverConfigs,
 		},
-	}
-
-	cc := constant.ClientConfig{
-		NamespaceId:         nacosConf.NamespaceId, // 如果需要支持多namespace，我们可以场景多个client,它们有不同的NamespaceId
-		TimeoutMs:           5 * 1000,
-		NotLoadCacheAtStart: true,
-		LogDir:              "tmp/nacos/log",
-		CacheDir:            "tmp/nacos/cache",
-		AccessKey:           nacosConf.AccessKey,
-		SecretKey:           nacosConf.SecretKey,
-		RotateTime:          "1h",
-		MaxAge:              3,
-		LogLevel:            "debug",
-		ListenInterval:      30 * 1000,
-	}
-
-	configClient, err := clients.CreateConfigClient(map[string]interface{}{
-		"serverConfigs": sc,
-		"clientConfig":  cc,
-	})
+	)
 	if err != nil {
 		color.Danger.Println("nacos read Error = ", err.Error(), "运行中断")
 		fmt.Println(err.Error())
@@ -344,7 +355,8 @@ func InitNACOS() {
 		DataId: nacosConf.DataId,
 		Group:  nacosConf.Group,
 	})
-
+	fmt.Println(content)
+	fmt.Println(nacosConf.Group)
 	if err != nil {
 		color.Danger.Println("env read Error = ", err.Error(), "运行中断")
 		fmt.Println(err.Error())

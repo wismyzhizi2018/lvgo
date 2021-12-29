@@ -2,11 +2,12 @@ package Middlewares
 
 import (
 	"context"
+	"order/config"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/color"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
-	"order/config"
 )
 
 func Jaeger() gin.HandlerFunc {

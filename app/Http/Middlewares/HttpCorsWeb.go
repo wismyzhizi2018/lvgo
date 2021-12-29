@@ -19,13 +19,13 @@ func HttpCorsWeb(ctx *gin.Context) { // 面向模版tpl
 	////
 	ctx.Header("Content-type", "text/html; charset=utf-8")
 	ctx.Header("Cache-Control", "max-age=60")
-	//ctx.Header("X-Powered-By", "ginvel.com; "+Common.ServerInfo["go_version"])
-	//ctx.Header("Author", "fyonecon")
+	// ctx.Header("X-Powered-By", "ginvel.com; "+Common.ServerInfo["go_version"])
+	// ctx.Header("Author", "fyonecon")
 	ctx.Header("Timezone", Common.ServerInfo["timezone"])
 	ctx.Header("Date", Common.GetTimeDate("Y-m-d H:i:s"))
-	//ctx.Header("Server", "Nginx")
+	// ctx.Header("Server", "Nginx")
 
-	//是否允许后续请求携带认证信息,该值只能是true,否则不返回
+	// 是否允许后续请求携带认证信息,该值只能是true,否则不返回
 	ctx.Header("Access-Control-Allow-Credentials", "true")
 	if method == "OPTIONS" {
 		ctx.AbortWithStatus(http.StatusNoContent)

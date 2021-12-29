@@ -6,8 +6,8 @@ import (
 
 func Info(ctx *gin.Context) {
 	user, flag := ctx.Get("authedUserObj")
-	//fmt.Println(user)
-	//fmt.Println(Order.GetOrder(orderCode))
+	// fmt.Println(user)
+	// fmt.Println(Order.GetOrder(orderCode))
 	if flag != true {
 		ctx.JSON(200, gin.H{"error": "user not exists"})
 		return

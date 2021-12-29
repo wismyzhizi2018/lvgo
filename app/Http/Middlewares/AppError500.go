@@ -44,14 +44,14 @@ func HideAppInfo(_info string) (info string) {
 func AppError500(ctx *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
-			//打印错误堆栈信息
+			// 打印错误堆栈信息
 			fmt.Printf("panic: %v\n", err)
 
 			debug.PrintStack() // 显示报错详情
 
 			pc := make([]uintptr, 8)
 			runtime.Callers(2, pc)
-			//f := runtime.FuncForPC(pc[0])
+			// f := runtime.FuncForPC(pc[0])
 
 			_fc0 := runtime.FuncForPC(pc[0]).Name()
 			_fc1 := runtime.FuncForPC(pc[1]).Name()
@@ -67,7 +67,7 @@ func AppError500(ctx *gin.Context) {
 			fc3 := HideAppInfo(_fc3)
 			fc4 := HideAppInfo(_fc4)
 			fc5 := HideAppInfo(_fc5)
-			//fc6 = HideAppInfo(_fc6)
+			// fc6 = HideAppInfo(_fc6)
 
 			errorFunc1 := gin.H{
 				"0": _fc0,
@@ -102,6 +102,6 @@ func AppError500(ctx *gin.Context) {
 			})
 		}
 	}()
-	//加载完 defer recover，继续后续接口调用并返回JSON提示
+	// 加载完 defer recover，继续后续接口调用并返回JSON提示
 	ctx.Next()
 }

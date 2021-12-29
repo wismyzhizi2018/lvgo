@@ -2,14 +2,15 @@ package config
 
 import (
 	"fmt"
-	"github.com/opentracing/opentracing-go"
-	"github.com/spf13/viper"
-	"github.com/uber/jaeger-client-go"
-	jaegerConfig "github.com/uber/jaeger-client-go/config"
 	"io"
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/opentracing/opentracing-go"
+	"github.com/spf13/viper"
+	"github.com/uber/jaeger-client-go"
+	jaegerConfig "github.com/uber/jaeger-client-go/config"
 )
 
 var jc JaegerConfig

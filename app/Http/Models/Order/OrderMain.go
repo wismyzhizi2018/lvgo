@@ -78,15 +78,14 @@ type Order_main struct {
 }
 
 func GetOrder(orderCode string) (orderMian *Order_main, err error) {
-	//查询数据库
+	// 查询数据库
 
-	//WhereMap := map[string]interface{}{}
-	//WhereMap["order_code"] = orderCode
+	// WhereMap := map[string]interface{}{}
+	// WhereMap["order_code"] = orderCode
 
 	var result Order_main
 	fmt.Println(Kit.DB)
 	if Kit.DB != nil {
-
 	}
 
 	Kit.DB.Raw("select * from order_main where order_code = ?", orderCode).Scan(&result)
@@ -95,10 +94,10 @@ func GetOrder(orderCode string) (orderMian *Order_main, err error) {
 }
 
 func GetOrderList(orderCode string) (orderMian *Order_main, err error) {
-	//查询数据库
+	// 查询数据库
 
-	//WhereMap := map[string]interface{}{}
-	//WhereMap["order_code"] = orderCode
+	// WhereMap := map[string]interface{}{}
+	// WhereMap["order_code"] = orderCode
 
 	var result Order_main
 

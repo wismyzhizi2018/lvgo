@@ -1,8 +1,9 @@
 package Helpers
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SuccessJson(message string, data interface{}) func(ctx *gin.Context) {

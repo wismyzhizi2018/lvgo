@@ -3,18 +3,21 @@ package driver
 import (
 	"database/sql"
 	"fmt"
-	"github.com/gookit/color"
 	"order/config"
 	"strconv"
 	"time"
 
+	"github.com/gookit/color"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var db *sql.DB
-var dbMap map[string]*sql.DB
+var (
+	db    *sql.DB
+	dbMap map[string]*sql.DB
+)
 
-//var MysqlDbErr error
+// var MysqlDbErr error
 
 type MysqlService interface {
 	InitConnection() (map[string]*sql.DB, error)
@@ -33,6 +36,7 @@ func NewService(dbConfig map[string]*config.DBSQLConf) MysqlService {
 		baseConfig: dbConfig,
 	}
 }
+
 func (s *mysqlService) GetMYSQLConnection(conns string) (*sql.DB, error) {
 	if dbSession, ok := dbMap[conns]; ok {
 		return dbSession, nil
@@ -48,6 +52,7 @@ func (s *mysqlService) GetMYSQLConnection(conns string) (*sql.DB, error) {
 	}
 	return nil, nil
 }
+
 func (s *mysqlService) CloseConnection() {
 	if dbMap != nil {
 		for _, dbSession := range dbMap {
@@ -85,7 +90,7 @@ func mysqlConnect(connections string, dbConfig *config.DBSQLConf) (*sql.DB, erro
 
 	if err = MysqlDb.Ping(); nil != err {
 		color.Danger.Println(connections+"MySQL数据库连接失败。。。", err.Error())
-		//os.Exit(200)
+		// os.Exit(200)
 	} else {
 		color.Info.Println(connections + "MySQL已连接 >>> ")
 	}

@@ -3,10 +3,11 @@ package AmazonApi
 import (
 	"context"
 	"fmt"
-	"gopkg.me/selling-partner-api-sdk/ordersV0"
 	"log"
 	"net/http"
 	"net/http/httputil"
+
+	"gopkg.me/selling-partner-api-sdk/ordersV0"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -38,7 +39,6 @@ func (a Account) getApiInstace() {
 		Region:       a.Region,
 		RoleArn:      a.RoleArn,
 	})
-
 	if err != nil {
 		panic(err)
 	}
@@ -47,7 +47,7 @@ func (a Account) getApiInstace() {
 
 	seller, err := sellers.NewClientWithResponses(endpoint,
 		sellers.WithRequestBefore(func(ctx context.Context, req *http.Request) error {
-			req.Header.Add("X-Amzn-Requestid", uuid.New().String()) //tracking requests
+			req.Header.Add("X-Amzn-Requestid", uuid.New().String()) // tracking requests
 			err = sellingPartner.SignRequest(req)
 			if err != nil {
 				return errors.Wrap(err, "sign error")
@@ -68,7 +68,6 @@ func (a Account) getApiInstace() {
 			return nil
 		}),
 	)
-
 	if err != nil {
 		panic(err)
 	}
@@ -79,8 +78,8 @@ func (a Account) getApiInstace() {
 	if err != nil {
 		panic(err)
 	}
-
 }
+
 func (a Account) GetOrderItems(orderId string) {
 	sellingPartner, err := sp.NewSellingPartner(&sp.Config{
 		ClientID:     a.ClientID,
@@ -92,7 +91,7 @@ func (a Account) GetOrderItems(orderId string) {
 		RoleArn:      a.RoleArn,
 	})
 	c, _ := ordersV0.NewClient(a.Endpoint, ordersV0.WithRequestBefore(func(ctx context.Context, req *http.Request) error {
-		req.Header.Add("X-Amzn-Requestid", uuid.New().String()) //tracking requests
+		req.Header.Add("X-Amzn-Requestid", uuid.New().String()) // tracking requests
 		err = sellingPartner.SignRequest(req)
 		if err != nil {
 			return errors.Wrap(err, "sign error")

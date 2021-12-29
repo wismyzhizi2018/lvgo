@@ -18,7 +18,6 @@ import (
 // 数字最低是=40；最高=100*核心数（是否会因为多核超过100%没测过，暂时定为100%上限）；0表示不做任何熔断。
 func RankingLimiter(ranking int64) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
 		// 请求链接信息
 		// 读取每次请求的请求全局参数
 		_host, _ := ctx.Get("host")
@@ -28,14 +27,14 @@ func RankingLimiter(ranking int64) gin.HandlerFunc {
 
 		// 读取超全局变量即可
 		var _cpuNum interface{} = Common.GetGlobalData("cpu_num")
-		//fmt.Printf("请求类型 %T", _cpuNum)
+		// fmt.Printf("请求类型 %T", _cpuNum)
 		var cpuNum int64 = _cpuNum.(int64)
 		var _cpuPercent interface{} = Common.GetGlobalData("cpu_percent")
 		var __cpuPercent float64 = _cpuPercent.(float64)
 		var cpuPercent int64 = int64(math.Floor(__cpuPercent))
 
 		var alertRanking string = "[80, 100]"
-		//if ranking >= 80 && ranking <= 100*cpuNum { // 正确范围
+		// if ranking >= 80 && ranking <= 100*cpuNum { // 正确范围
 		if ranking >= 80 && ranking <= 100 { // 正确范围
 			ctx.Next()
 		} else if ranking == 0 { // 0不做任何熔断操作
@@ -72,6 +71,5 @@ func RankingLimiter(ranking int64) gin.HandlerFunc {
 		} else {
 			ctx.Next()
 		}
-
 	}
 }

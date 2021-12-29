@@ -10,7 +10,6 @@ import (
 
 // Log 记录一般日志，定期自动删除
 func Log(_txt string, _ip string) {
-
 	// 创建文件夹
 	filepath := Common.ServerInfo["storage_path"] + "log_file/log/"
 	dateFile := Common.GetTimeDate("Ymd") + "/"
@@ -30,7 +29,7 @@ func Log(_txt string, _ip string) {
 	file, err := os.OpenFile(filePath+fileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Println("文件创建失败", filePath, err)
-		//panic(err)
+		// panic(err)
 		return
 	}
 	// 延迟关闭文件
@@ -53,12 +52,10 @@ func Log(_txt string, _ip string) {
 	if err1 != nil {
 		log.Println("老文件夹删除失败=", err1)
 	}
-
 }
 
 // Error 记录错误日志
 func Error(_txt string, _ip string) {
-
 	// 创建文件夹
 	filepath := Common.ServerInfo["storage_path"] + "log_file/error/"
 	dateFile := Common.GetTimeDate("Ymd") + "/"
@@ -95,5 +92,4 @@ func Error(_txt string, _ip string) {
 	if err1 != nil {
 		log.Println("老文件夹删除失败=", err1)
 	}
-
 }

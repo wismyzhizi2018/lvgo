@@ -3,14 +3,6 @@ package Example
 // 拦截器
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/go-playground/locales/en"
-	"github.com/go-playground/locales/zh"
-	ut "github.com/go-playground/universal-translator"
-	"github.com/go-playground/validator/v10"
-	en_trans "github.com/go-playground/validator/v10/translations/en"
-	zh_trans "github.com/go-playground/validator/v10/translations/zh"
-	"github.com/gookit/color"
 	"log"
 	"net/http"
 	"order/app/Common"
@@ -21,6 +13,15 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/locales/en"
+	"github.com/go-playground/locales/zh"
+	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
+	en_trans "github.com/go-playground/validator/v10/translations/en"
+	zh_trans "github.com/go-playground/validator/v10/translations/zh"
+	"github.com/gookit/color"
 )
 
 func VerifyExample(ctx *gin.Context) {
@@ -57,8 +58,8 @@ func Test(ctx *gin.Context) {
 }
 
 type UserInfo struct {
-	Uname  string `validate:"required,min=5" label:"用户名"`       //UUID 类型
-	Passwd string `validate:"required,min=6,max=32" label:"密码"` //自定义校验
+	Uname  string `validate:"required,min=5" label:"用户名"`       // UUID 类型
+	Passwd string `validate:"required,min=6,max=32" label:"密码"` // 自定义校验
 
 }
 
@@ -79,7 +80,6 @@ func CheckUniqueName(fl validator.FieldLevel) bool {
 // 	@params *gin.Context
 // 	@return  null
 func Login(ctx *gin.Context) {
-
 	uname := Common.Input(ctx, "uname")
 	passwd := Common.Input(ctx, "passwd")
 	autoLogin := Common.Input(ctx, "auto_login")
@@ -129,13 +129,13 @@ func Login(ctx *gin.Context) {
 
 		return name
 	})
-	//validate := validator.New()
+	// validate := validator.New()
 	err := validate.Struct(s) // 执行验证
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
 		for _, e := range errs {
 			// can translate each error one at a time.
-			//color.Error.Println(e.Translate(trans))
+			// color.Error.Println(e.Translate(trans))
 			ctx.AbortWithStatusJSON(200, gin.H{
 				"code":    500,
 				"token":   "",
@@ -147,7 +147,7 @@ func Login(ctx *gin.Context) {
 	}
 
 	resultInfo, err := User.GetUserInfo(uname)
-	//color.Debug.Println(validate)
+	// color.Debug.Println(validate)
 	color.Debug.Println(resultInfo)
 	color.Debug.Println(resultInfo.Mobile)
 	if resultInfo != nil && err == nil {
@@ -164,7 +164,6 @@ func Login(ctx *gin.Context) {
 				d = time.Second * 1800
 			}
 			token, err := Middlewares.JwtGenerateToken(m, d)
-
 			if err != nil {
 				ctx.AbortWithStatusJSON(http.StatusPreconditionFailed, gin.H{"msg": err.Error()})
 			}
@@ -196,16 +195,15 @@ func Login(ctx *gin.Context) {
 	}
 	// 接口返回
 
-	//fmt.Printf("时间v1 %+v", time.Hour*24*365)
-	//fmt.Printf("时间v2 %+v", time.Second*180)
+	// fmt.Printf("时间v1 %+v", time.Hour*24*365)
+	// fmt.Printf("时间v2 %+v", time.Second*180)
 
-	//token, err := jwtGenerateToken(m, time.Hour*24*365)
+	// token, err := jwtGenerateToken(m, time.Hour*24*365)
 	// token, err := jwtGenerateToken(m, time.Second*30)
 	// if err != nil {
 	// 	ctx.AbortWithStatusJSON(http.StatusPreconditionFailed, gin.H{"msg": err.Error()})
 	// }
 	// ctx.Header("JWT", token)
-
 }
 
 type MsgJson struct {
@@ -213,7 +211,7 @@ type MsgJson struct {
 }
 
 func RefreshToken(ctx *gin.Context) {
-	//token := Common.Input(ctx, "token")
+	// token := Common.Input(ctx, "token")
 	inputJson := MsgJson{}
 	if err := ctx.ShouldBindJSON(&inputJson); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusPreconditionFailed, gin.H{"msg": err.Error()})
@@ -230,7 +228,6 @@ func RefreshToken(ctx *gin.Context) {
 		d = time.Second * 1800
 
 		newToken, err := Middlewares.JwtGenerateToken(user, d)
-
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusPreconditionFailed, gin.H{"msg": err.Error()})
 			return

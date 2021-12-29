@@ -2,6 +2,11 @@ package Request
 
 import (
 	"fmt"
+	"order/app/Common"
+	"reflect"
+	"strings"
+	"time"
+
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
 	"github.com/go-playground/locales/zh"
@@ -9,10 +14,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	en_trans "github.com/go-playground/validator/v10/translations/en"
 	zh_trans "github.com/go-playground/validator/v10/translations/zh"
-	"order/app/Common"
-	"reflect"
-	"strings"
-	"time"
 )
 
 var Trans ut.Translator
@@ -34,7 +35,7 @@ func InitTrans(locale string) (err error) {
 		curLocales := locale                     // 设置当前语言类型
 		var ok bool
 		Trans, ok = uni.GetTranslator(curLocales) // 获取对应语言的转换器
-		//validate := validator.New()
+		// validate := validator.New()
 		if !ok {
 			return fmt.Errorf("uni.GetTranslator(%s) failed", locale)
 		}
@@ -77,20 +78,20 @@ func checkDate(fl validator.FieldLevel) bool {
 	now := time.Now()
 
 	date, err := time.Parse(format, fl.Field().String())
-	//color.Debug.Println(date)
+	// color.Debug.Println(date)
 	b := now.Format(format)
 	a := date.Format(format)
-	//color.Debug.Println(b)
+	// color.Debug.Println(b)
 	if err != nil {
 		return false
 	}
-	//color.Debug.Println(a)
-	//color.Debug.Println(b)
+	// color.Debug.Println(a)
+	// color.Debug.Println(b)
 	s1 := Common.DateToTimeS(a, "Y-m-d")
 	s2 := Common.DateToTimeS(b, "Y-m-d")
 
 	if s1 > s2 {
-		//color.Danger.Println(time.Now())
+		// color.Danger.Println(time.Now())
 		return false
 	}
 	return true

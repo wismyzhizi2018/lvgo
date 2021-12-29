@@ -44,7 +44,7 @@ func RouteMust(route *gin.Engine) {
 	route.NoRoute(Middlewares.HttpCorsApi, Middlewares.HttpLimiter(2), func(ctx *gin.Context) {
 		var url string = ctx.Request.Host + ctx.Request.URL.Path
 		var IP string = ctx.ClientIP()
-		//Kit.Error("404路由 >>> " + url, IP)
+		// Kit.Error("404路由 >>> " + url, IP)
 		log.Println("404路由 >>> "+url, IP)
 		ctx.JSONP(http.StatusNotFound, gin.H{
 			"state": 404,
@@ -57,8 +57,8 @@ func RouteMust(route *gin.Engine) {
 	})
 
 	// swagger接口文档，适配于GinLaravel
-	//url := ginSwagger.URL("http://" + serverAddr + "/swagger/doc.json") // The url pointing to API definition
-	//route.GET("/swagger/*any", HttpCorsWeb, HttpLimiter(2), ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// url := ginSwagger.URL("http://" + serverAddr + "/swagger/doc.json") // The url pointing to API definition
+	// route.GET("/swagger/*any", HttpCorsWeb, HttpLimiter(2), ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// ico图标
 	route.StaticFile("/favicon.ico", staticPath+"favicon.ico")
@@ -66,8 +66,7 @@ func RouteMust(route *gin.Engine) {
 	route.StaticFile("/robots.txt", staticPath+"robots.txt")
 
 	// 示例-api_json数据输出
-	//log.Println("log测试 100\n ")
+	// log.Println("log测试 100\n ")
 
 	route.Any("api", Middlewares.HttpCorsApi, Middlewares.HttpLimiter(200), Middlewares.RankingLimiter(100), Controllers.Api)
-
 }

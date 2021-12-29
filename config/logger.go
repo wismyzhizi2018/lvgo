@@ -28,7 +28,7 @@ func NewLogConfig() LogConfig {
 func GetLogConfig() *LogConfig {
 	logFilePath, _ := os.Getwd()
 	logFileName := "/storage/logs/access_go_laravel.log"
-	//日志文件
+	// 日志文件
 	fileName := path.Join(logFilePath, logFileName)
 	logConfig.Level = "info"
 	logConfig.Filename = fileName

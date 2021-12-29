@@ -1,9 +1,10 @@
 package config
 
 import (
-	"github.com/spf13/viper"
 	"log"
 	"os"
+
+	"github.com/spf13/viper"
 )
 
 //func InitConfig() {
@@ -12,16 +13,16 @@ import (
 
 var DatabaseConfig map[string]*DBSQLConf
 
-//DBSQLConf 结构体中的成员变量，只有首字母大写，才能在其定义的 package 以外访问。而在同一个 package 内，就不会有此限制。
+// DBSQLConf 结构体中的成员变量，只有首字母大写，才能在其定义的 package 以外访问。而在同一个 package 内，就不会有此限制。
 // 数据库的配置
 type DBSQLConf struct {
-	Driver             string //驱动名称
-	Host               string //地址
-	Port               string //端口
-	Database           string //数据库名称
-	Username           string //用户名
-	Password           string //密码
-	Charset            string //字符编码
+	Driver             string // 驱动名称
+	Host               string // 地址
+	Port               string // 端口
+	Database           string // 数据库名称
+	Username           string // 用户名
+	Password           string // 密码
+	Charset            string // 字符编码
 	Timeout            string // 超时时间
 	DbMaxOpenConns     string // 连接池最大连接数
 	DbMaxIdleConns     string // 连接池最大空闲数
@@ -47,7 +48,7 @@ func GetDataBaseConfig() map[string]*DBSQLConf {
 	}
 	databaseConf := make(map[string]*DBSQLConf)
 
-	//数据库默认配置
+	// 数据库默认配置
 	databaseConf["mysql"] = &DBSQLConf{
 		Driver:             "mysql",
 		Host:               viper.GetString("DB_HOST"),
@@ -76,7 +77,7 @@ func GetDataBaseConfig() map[string]*DBSQLConf {
 		DbMaxLifetimeConns: "7200",
 	}
 
-	//mongo db的配置
+	// mongo db的配置
 	databaseConf["mongodb"] = &DBSQLConf{
 		Driver:             "mongodb",
 		Host:               viper.GetString("MONGODB_HOST"),
@@ -91,7 +92,7 @@ func GetDataBaseConfig() map[string]*DBSQLConf {
 		DbMaxLifetimeConns: "7200",
 	}
 
-	//sqlsrv db的配置
+	// sqlsrv db的配置
 	databaseConf["sqlsrv"] = &DBSQLConf{
 		Driver:             "sqlsrv",
 		Host:               viper.GetString("SQL_SERVER_HOST"),
@@ -106,7 +107,7 @@ func GetDataBaseConfig() map[string]*DBSQLConf {
 		DbMaxLifetimeConns: "7200",
 	}
 
-	//pgsql db的配置
+	// pgsql db的配置
 	databaseConf["pgsql"] = &DBSQLConf{
 		Driver:             "sqlsrv",
 		Host:               viper.GetString("DB_HOST"),
@@ -120,7 +121,7 @@ func GetDataBaseConfig() map[string]*DBSQLConf {
 		DbMaxIdleConns:     "10",
 		DbMaxLifetimeConns: "7200",
 	}
-	//更多..
+	// 更多..
 	return databaseConf
 }
 

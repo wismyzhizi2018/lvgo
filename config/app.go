@@ -3,8 +3,6 @@ package config
 import (
 	"bytes"
 	"fmt"
-	"github.com/gookit/color"
-	"github.com/spf13/viper"
 	"log"
 	"os"
 	"path"
@@ -12,6 +10,9 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+
+	"github.com/gookit/color"
+	"github.com/spf13/viper"
 
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
@@ -24,9 +25,9 @@ func LoadInit() {
 	flagMain := strings.Index(name, "main") == 0 && strings.Index(arg1, "go-build") < 0
 	flagServer := strings.Index(name, "webserver") == 0 && strings.Index(arg1, "go-build") < 0
 	if flagMain || flagServer {
-		//从二进制中InitBinData加载配置文件
+		// 从二进制中InitBinData加载配置文件
 		log.Println("运行加载InitBinData下的env配置项文件 >>> ")
-		//InitBinData()
+		// InitBinData()
 	} else {
 		log.Println("运行加载env配置项文件 >>> ")
 		//	InitEnv()
@@ -37,12 +38,11 @@ func InitEnv() {
 	viper.SetConfigFile(".env")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(".")
-	err := viper.ReadInConfig() //根据上面配置加载文件
+	err := viper.ReadInConfig() // 根据上面配置加载文件
 	if err != nil {
 		log.Println("env decode Error = ", err.Error(), "运行中断")
 		os.Exit(200)
 	}
-
 }
 
 // InitNACOS
@@ -52,19 +52,19 @@ func InitNACOS() {
 	mainDirectory, _ := os.Getwd()
 	logFilePath := mainDirectory + "/tmp/nacos/log/"
 	logFileName := "nacos.log"
-	//日志文件
+	// 日志文件
 	fileName := path.Join(logFilePath, logFileName)
-	//写入文件
+	// 写入文件
 	_, err := os.Stat(fileName)
 	if !(err == nil || os.IsExist(err)) {
 		var err error
-		//目录不存在则创建
+		// 目录不存在则创建
 		if _, err = os.Stat(logFilePath); err != nil {
-			if err = os.MkdirAll(logFilePath, 0777); err != nil { //这里如果是0711权限 可能会导致其它线程，读取文件夹内内容出错
+			if err = os.MkdirAll(logFilePath, 0777); err != nil { // 这里如果是0711权限 可能会导致其它线程，读取文件夹内内容出错
 				color.Danger.Println("Create log dir err :", err)
 			}
 		}
-		//创建文件
+		// 创建文件
 		if _, err = os.Create(fileName); err != nil {
 			color.Danger.Println("Create log file err :", err)
 		}
@@ -106,33 +106,31 @@ func InitNACOS() {
 		DataId: nacosConf.DataId,
 		Group:  nacosConf.Group,
 	})
-
 	if err != nil {
 		color.Danger.Println("env read Error = ", err.Error(), "运行中断")
 		fmt.Println(err.Error())
 		os.Exit(200)
 	}
-	color.Info.Println(content) //字符串 - yaml
+	color.Info.Println(content) // 字符串 - yaml
 	color.Debug.Println("使用NACOS加载配置文件")
 	viper.SetConfigType("env")
-	//读取
+	// 读取
 	if err := viper.ReadConfig(bytes.NewBuffer([]byte(content))); err != nil {
 		color.Danger.Println("env read Error = ", err.Error(), "运行中断")
 		fmt.Println(err.Error())
 		os.Exit(200)
 	}
-
 }
 
 func InitEmbedData(bytesContent []byte) {
-	//设置要读取的文件类型
+	// 设置要读取的文件类型
 	if len(bytesContent) == 0 {
 		color.Error.Println("配置文件为空,请检查读取配置文件是否正确")
 		os.Exit(200)
 	}
 	color.Debug.Println("使用go:embed加载配置文件")
 	viper.SetConfigType("env")
-	//读取
+	// 读取
 	if err := viper.ReadConfig(bytes.NewBuffer(bytesContent)); err != nil {
 		log.Println("env read Error = ", err.Error(), "运行中断")
 		os.Exit(200)
@@ -202,7 +200,7 @@ func GetFrameworkConfig() map[string]string {
 	if len(locale) == 0 {
 		locale = "en"
 	}
-	//color.Danger.Println(locale)
+	// color.Danger.Println(locale)
 
 	conf := make(map[string]string)
 	conf["timezone"] = timezone // 时区

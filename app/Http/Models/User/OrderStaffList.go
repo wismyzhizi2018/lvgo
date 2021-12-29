@@ -2,8 +2,9 @@ package User
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"order/app/Http/Models/Kit"
+
+	"gorm.io/gorm"
 )
 
 type Order_staff_list struct {
@@ -36,16 +37,16 @@ type Order_staff_list struct {
 func (*Order_staff_list) TableName() string {
 	return "order_staff_list"
 }
-func GetUserInfo(mobile string) (orderUser *Order_staff_list, err error) {
-	//查询数据库
 
-	//WhereMap := map[string]interface{}{}
-	//WhereMap["order_code"] = orderCode
+func GetUserInfo(mobile string) (orderUser *Order_staff_list, err error) {
+	// 查询数据库
+
+	// WhereMap := map[string]interface{}{}
+	// WhereMap["order_code"] = orderCode
 
 	var result Order_staff_list
 	fmt.Println(Kit.DB)
 	if Kit.DB != nil {
-
 	}
 	if err := Kit.DB.Where("mobile = ?", mobile).First(&result).Error; err == nil {
 		return &result, nil
@@ -61,25 +62,24 @@ type result struct {
 	Count int64               `json:"total"`
 }
 
-//GetUserList 获取多条记录
+// GetUserList 获取多条记录
 // Usage:
 //  user,_ := User.GetUserList(s.CurrentPage, s.PageSize)
 func GetUserList(pageSize int, currentPage int) (res *result, err error) {
-	//查询数据库
+	// 查询数据库
 
-	//WhereMap := map[string]interface{}{}
-	//WhereMap["order_code"] = orderCode
+	// WhereMap := map[string]interface{}{}
+	// WhereMap["order_code"] = orderCode
 	pageSize = (currentPage - 1) * pageSize
 
-	//fmt.Println(Kit.DB)
+	// fmt.Println(Kit.DB)
 	if Kit.DB != nil {
-
 	}
 	var UserList []Order_staff_list
 	var Count int64
 
-	//db.Limit(3).Find(&users)
-	//db.Offset(3).Find(&users)
+	// db.Limit(3).Find(&users)
+	// db.Offset(3).Find(&users)
 	if err := Kit.DB.Find(&UserList).Count(&Count).Error; err != nil {
 		return nil, err
 	}

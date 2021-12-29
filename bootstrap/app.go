@@ -3,17 +3,24 @@ package bootstrap
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/xxl-job/xxl-job-executor-go/example/task"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
+	"order/app/Http/Middlewares"
+	"order/app/Http/Models/Kit"
+	"order/app/Http/Request"
 	"order/app/Libs/Consul"
+	"order/bootstrap/driver"
+	"order/config"
+	"order/routes"
 	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/xxl-job/xxl-job-executor-go/example/task"
+	"go.uber.org/zap"
 
 	"github.com/satori/go.uuid"
 
@@ -22,12 +29,6 @@ import (
 	"github.com/gin-middleware/xxl-job-executor"
 	"github.com/gookit/color"
 	"github.com/xxl-job/xxl-job-executor-go"
-	"order/app/Http/Middlewares"
-	"order/app/Http/Models/Kit"
-	"order/app/Http/Request"
-	"order/bootstrap/driver"
-	"order/config"
-	"order/routes"
 )
 
 type Application struct {
@@ -39,10 +40,9 @@ type Application struct {
 // App 配置并启动http服务
 // 项目访问入口
 func (app *Application) App() {
-
 	// 必选初始化
 	HttpServer := app.HttpServer
-	//加载配置信息
+	// 加载配置信息
 	config.InitEmbedData(app.BytesContent)
 	config.InitNACOS()
 	mainDirectory, _ := os.Getwd()
@@ -54,12 +54,12 @@ func (app *Application) App() {
 		return
 	}
 	color.Info.Printf("%v\n", string(bytes))
-	//获取配置信息
+	// 获取配置信息
 	serverConfig := config.GetServerConfig()
 	frameworkConfig := config.GetFrameworkConfig()
 	Request.InitTrans(frameworkConfig["locale"])
 
-	//加载mysql链接
+	// 加载mysql链接
 	baseInfo := config.GetDataBaseConfig()
 	driver.NewService(baseInfo).InitConnection()
 	driver.InitGorm()
@@ -74,7 +74,7 @@ func (app *Application) App() {
 	defer driver.NewService(baseInfo).CloseConnection()
 	// 服务停止时清理数据库链接
 
-	//svc.InitConnection()
+	// svc.InitConnection()
 	// Gin服务
 	HttpServer = gin.New()
 
@@ -88,18 +88,18 @@ func (app *Application) App() {
 		}()
 	}
 
-	//启用链路追踪中间件
+	// 启用链路追踪中间件
 	HttpServer.Use(Middlewares.RequestId)
 
 	jaegerConfig := config.ParseConfig()
 	if jaegerConfig.Enabled {
-		//启用链路追踪中间件
+		// 启用链路追踪中间件
 		color.Debug.Println("启用链路追踪中间件 ")
 		HttpServer.Use(Middlewares.Jaeger())
 	}
 
-	//启用日志中间件
-	//HttpServer.Use(Middlewares.LoggerToFiles())
+	// 启用日志中间件
+	// HttpServer.Use(Middlewares.LoggerToFiles())
 	HttpServer.Use(Middlewares.ZapLoggerToFiles(config.GetLogConfig()))
 
 	// 捕捉接口运行耗时（必须排第一）
@@ -127,17 +127,17 @@ func (app *Application) App() {
 		routes.RouterRegister(HttpServer)
 	}
 
-	//xxl-job
+	// xxl-job
 	xxlConfig := config.GetXXLJobConfig()
-	//初始化执行器
+	// 初始化执行器
 	if xxlConfig.Enabled {
 		exec := xxl.NewExecutor(
 			xxl.ServerAddr(xxlConfig.ServerAddr),
-			xxl.AccessToken(xxlConfig.AccessToken), //请求令牌(默认为空)
-			xxl.ExecutorIp(xxlConfig.ExecutorIp),   //可自动获取
-			xxl.ExecutorPort(serverConfig["PORT"]), //默认9999（此处要与gin服务启动port必需一至）
-			xxl.RegistryKey(xxlConfig.RegistryKey), //执行器名称
-			//xxl.SetLogger(&logger{}), //执行器名称
+			xxl.AccessToken(xxlConfig.AccessToken), // 请求令牌(默认为空)
+			xxl.ExecutorIp(xxlConfig.ExecutorIp),   // 可自动获取
+			xxl.ExecutorPort(serverConfig["PORT"]), // 默认9999（此处要与gin服务启动port必需一至）
+			xxl.RegistryKey(xxlConfig.RegistryKey), // 执行器名称
+			// xxl.SetLogger(&logger{}), //执行器名称
 		)
 		exec.Init()
 		defer exec.Stop()
@@ -151,16 +151,16 @@ func (app *Application) App() {
 		//	}}
 		//})
 		xxl_job_executor_gin.XxlJobMux(HttpServer, exec)
-		//注册任务handler
+		// 注册任务handler
 		exec.RegTask("task.test", task.Test)
 		exec.RegTask("task.test2", task.Test2)
 		exec.RegTask("task.panic", task.Panic)
 	}
-	//Router.Api(HttpServer) // 面向Api
-	//Router.Web(HttpServer) // 面向模版输出
+	// Router.Api(HttpServer) // 面向Api
+	// Router.Web(HttpServer) // 面向模版输出
 
 	// 初始化定时器（立即运行定时器）
-	//Task.TimeInterval(0, 0, "0")
+	// Task.TimeInterval(0, 0, "0")
 
 	// 实际访问网址和端口
 	_host := "127.0.0.1:" + serverConfig["PORT"]              // 测试访问IP
@@ -187,7 +187,7 @@ func (app *Application) App() {
 		Handler: HttpServer,
 	}
 
-	//后台启动一个goroutine来启动服务
+	// 后台启动一个goroutine来启动服务
 	go func() {
 		// service connections
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -196,7 +196,7 @@ func (app *Application) App() {
 		}
 	}()
 
-	//使用注册中心上报id和服务器状态
+	// 使用注册中心上报id和服务器状态
 	consulConfig := config.GetConsulConfig()
 
 	host = consulConfig["HOST"].(string)

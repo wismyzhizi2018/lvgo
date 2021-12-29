@@ -2,8 +2,9 @@ package Consul
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"testing"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/satori/go.uuid"
 )

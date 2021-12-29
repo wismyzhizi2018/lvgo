@@ -2,25 +2,26 @@ package Middlewares
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"order/app/Common"
 	"order/config"
 	"os"
 	"path"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 // Logger 获取日志的实例
 func Logger() *logrus.Logger {
 	logFilePath := Common.ServerInfo["storage_log_path"]
 	logFileName := Common.ServerInfo["access_log_name"]
-	//日志文件
+	// 日志文件
 	fileName := path.Join(logFilePath, logFileName)
-	//写入文件
+	// 写入文件
 	flagExist := Common.FileIsExist(fileName)
 	if !flagExist {
 		if _, errs := Common.CreateFile(logFilePath, logFileName); errs != nil {
@@ -28,18 +29,18 @@ func Logger() *logrus.Logger {
 		}
 	}
 	src, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
-	//defer src.Close()
+	// defer src.Close()
 	if err != nil {
 		fmt.Println("Os open log file err :", err)
 	}
-	//实例化
+	// 实例化
 	logger := logrus.New()
-	//设置输出
+	// 设置输出
 	logger.Out = src
-	//设置日志级别
+	// 设置日志级别
 	logger.SetLevel(logrus.TraceLevel)
 
-	//格式化时间
+	// 格式化时间
 	logger.SetFormatter(&logrus.JSONFormatter{
 		TimestampFormat: "2006-01-02 15:04:05",
 	})
@@ -80,31 +81,31 @@ func LoggerToFiles() gin.HandlerFunc {
 	//设置日志格式
 	//logger.SetFormatter(&logrus.TextFormatter{})
 	return func(c *gin.Context) {
-		//开始时间
+		// 开始时间
 		startTime := time.Now()
 
 		// 处理请求
 		c.Next()
 
-		//执行时间
+		// 执行时间
 		execTime := time.Since(startTime)
 
-		//状态码
+		// 状态码
 		statusCode := c.Writer.Status()
 
-		//请求IP
+		// 请求IP
 		clientIP := c.ClientIP()
 
-		//请求方式
+		// 请求方式
 		requestMethod := c.Request.Method
 
-		//请求路由
+		// 请求路由
 		requestURI := c.Request.RequestURI
 
-		//请求唯一ID
+		// 请求唯一ID
 		requestId := c.Writer.Header().Get("X-Request-Id")
 
-		//日志记录自定义字段
+		// 日志记录自定义字段
 		logger.WithFields(logrus.Fields{
 			"status_code":  statusCode,
 			"execute_time": execTime,
@@ -123,7 +124,7 @@ var lg *zap.Logger
 func InitLogger(cfg *config.LogConfig) (err error) {
 	writeSyncer := getLogWriter(cfg.Filename, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge)
 	encoder := getEncoder()
-	var l = new(zapcore.Level)
+	l := new(zapcore.Level)
 	err = l.UnmarshalText([]byte(cfg.Level))
 	if err != nil {
 		return
@@ -135,7 +136,7 @@ func InitLogger(cfg *config.LogConfig) (err error) {
 	return
 }
 
-//编码器(如何写入日志)
+// 编码器(如何写入日志)
 func getEncoder() zapcore.Encoder {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
@@ -146,13 +147,13 @@ func getEncoder() zapcore.Encoder {
 	return zapcore.NewJSONEncoder(encoderConfig)
 }
 
-//指定日志将写到哪里去
+// 指定日志将写到哪里去
 func getLogWriter(filename string, maxSize, maxBackup, maxAge int) zapcore.WriteSyncer {
-	//Filename : 日志文件的位置；
-	//MaxSize ：在进行切割之前，日志文件的最大大小（以MB为单位）；
-	//MaxBackups ：保留旧文件的最大个数；
-	//MaxAges ：保留旧文件的最大天数；
-	//Compress ：是否压缩/归档旧文件；
+	// Filename : 日志文件的位置；
+	// MaxSize ：在进行切割之前，日志文件的最大大小（以MB为单位）；
+	// MaxBackups ：保留旧文件的最大个数；
+	// MaxAges ：保留旧文件的最大天数；
+	// Compress ：是否压缩/归档旧文件；
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   filename,
 		MaxSize:    maxSize,
@@ -228,36 +229,36 @@ func InitZapLogger(logpath string, loglevel string) {
 
 // ZapLoggerToFiles 日志记录到文件
 func ZapLoggerToFiles(cfg *config.LogConfig) gin.HandlerFunc {
-	//InitLogger(cfg)
+	// InitLogger(cfg)
 	InitZapLogger(cfg.Filename, cfg.Level)
 	return func(c *gin.Context) {
-		//开始时间
+		// 开始时间
 		startTime := time.Now()
 
 		// 处理请求
 		c.Next()
 
-		//执行时间
+		// 执行时间
 		execTime := time.Since(startTime)
 
-		//状态码
+		// 状态码
 		statusCode := c.Writer.Status()
 
-		//请求IP
+		// 请求IP
 		clientIP := c.ClientIP()
 
-		//请求方式
+		// 请求方式
 		requestMethod := c.Request.Method
 
-		//请求路由
+		// 请求路由
 		requestURI := c.Request.RequestURI
 
-		//请求唯一ID
+		// 请求唯一ID
 		requestId := c.Writer.Header().Get("X-Request-Id")
 
 		path := c.Request.URL.Path
 
-		//日志记录自定义字段
+		// 日志记录自定义字段
 		logger.Info(path,
 			zap.Int("status_code", statusCode),
 			zap.Duration("execute_time", execTime),

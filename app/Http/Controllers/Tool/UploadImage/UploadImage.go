@@ -1,9 +1,10 @@
 package UploadImage
 
 import (
+	"order/app/Http/Models/Order"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/color"
-	"order/app/Http/Models/Order"
 )
 
 func Test(ctx *gin.Context) {
@@ -16,12 +17,12 @@ func Test(ctx *gin.Context) {
 	//fmt.Println(body)
 	orderCode := ctx.Query("order_code")
 	user, err := Order.GetOrder(orderCode)
-	//fmt.Println(orderCode)
-	//fmt.Println(Order.GetOrder(orderCode))
+	// fmt.Println(orderCode)
+	// fmt.Println(Order.GetOrder(orderCode))
 	if err != nil {
 		ctx.JSON(200, gin.H{"error": err})
 	}
-	//fmt.Printf("\n %c[0;48;32m%s%c[0m\n\n", 0x1B, "["+time.Now().Format("2006-01-02 15:04:05")+"]"+orderCode, 0x1B)
+	// fmt.Printf("\n %c[0;48;32m%s%c[0m\n\n", 0x1B, "["+time.Now().Format("2006-01-02 15:04:05")+"]"+orderCode, 0x1B)
 	color.Debug.Println("Debug message : " + orderCode)
 	id := "1008611" //
 	nickname := "456"
@@ -43,6 +44,6 @@ func Test(ctx *gin.Context) {
 	}
 	ctx.JSON(200, back)
 }
-func signTopRequest(params map[string]string, secret string, signMethod string) {
 
+func signTopRequest(params map[string]string, secret string, signMethod string) {
 }

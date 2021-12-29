@@ -3,13 +3,14 @@ package WebSocket
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"order/app/Common"
 	"order/app/Http/Models/Kit"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 var ch = make(chan string)
@@ -25,7 +26,7 @@ var upGrader = websocket.Upgrader{
 }
 
 func getInputSay(ch chan string) {
-	var ctx = context.Background()
+	ctx := context.Background()
 	pp := Kit.RDB.PSubscribe(ctx, "__keyevent@0__:expired")
 	defer pp.Close()
 	for msg := range pp.Channel() {
@@ -35,14 +36,13 @@ func getInputSay(ch chan string) {
 }
 
 func getOutPutSay(ch chan string) {
-
 }
 
 // Ping1 处理WebSocket消息
 // ws:// wss://
 // 参考：https://blog.csdn.net/qq_17612199/article/details/79601318
 func Ping1(ctx *gin.Context) {
-	//升级get请求为webSocket协议
+	// 升级get请求为webSocket协议
 	ws, err := upGrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		return
@@ -85,7 +85,7 @@ func Ping1(ctx *gin.Context) {
 		if err != nil {
 			break
 		}
-		//ch1 := make(chan string)
+		// ch1 := make(chan string)
 		go func() {
 			for {
 				message := <-ch
@@ -106,7 +106,7 @@ func Ping1(ctx *gin.Context) {
 			}
 		}()
 		go func() {
-			var ctx = context.Background()
+			ctx := context.Background()
 			pp := Kit.RDB.PSubscribe(ctx, "__keyevent@0__:expired")
 			defer pp.Close()
 			for msg := range pp.Channel() {

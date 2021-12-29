@@ -16,7 +16,7 @@ func RouterRegister(app *gin.Engine) (group *gin.RouterGroup) {
 	// 其他
 	// RouterGroup.ApiGen1(app)
 	// RouterGroup.ApiGen3(app)
-	//log.Println("log测试 \n ")
+	// log.Println("log测试 \n ")
 
 	return adminGroup
 }

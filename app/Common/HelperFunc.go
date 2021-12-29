@@ -8,7 +8,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"html"
 	"io"
 	"io/ioutil"
@@ -22,6 +21,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Log 自定义终端打印日志
@@ -30,6 +31,7 @@ func Log(txt ...interface{}) {
 		log.Println("Log：", txt)
 	}
 }
+
 func Error(txt ...interface{}) {
 	if Config["log_debug"] == true || Config["log_debug"] == "true" {
 		log.Println("Error：", txt)
@@ -136,8 +138,8 @@ func StringToInt(_str string) int64 {
 	_int, err := strconv.ParseInt(_str, 10, 64) // string转int
 	if err != nil {                             // 报错则默认返回0
 		_int = 0
-		//fmt.Println("格式转换错误，默认为0。")
-		//fmt.Println(err)
+		// fmt.Println("格式转换错误，默认为0。")
+		// fmt.Println(err)
 	}
 	return _int
 }
@@ -153,8 +155,8 @@ func StringToFloat(_str string) float64 {
 	_float, err := strconv.ParseFloat(_str, 64) // string转int
 	if err != nil {                             // 报错则默认返回0
 		_float = 0.0
-		//fmt.Println("格式转换错误，默认为0。")
-		//fmt.Println(err)
+		// fmt.Println("格式转换错误，默认为0。")
+		// fmt.Println(err)
 	}
 	return _float
 }
@@ -227,7 +229,7 @@ func MakePaging(_total int, _limit int, _page int) map[string]interface{} {
 			footPage = footPage + IntToString(int64(p)) + ","
 		}
 	}
-	//footPage = footPage + IntToString(int64(nowPage)) + ","
+	// footPage = footPage + IntToString(int64(nowPage)) + ","
 	// 后4页
 	for b := 0; b < footLen; b++ {
 		p := nowPage + b
@@ -236,7 +238,7 @@ func MakePaging(_total int, _limit int, _page int) map[string]interface{} {
 		}
 	}
 
-	var back = map[string]interface{}{
+	back := map[string]interface{}{
 		"total": _total,
 		"page":  _page + 1,
 		"limit": _limit,
@@ -262,7 +264,7 @@ func GetTimeDate(_format string) (date string) {
 	date = _format
 
 	// 时区
-	//timeZone, _ := time.LoadLocation(ServerInfo["timezone"])
+	// timeZone, _ := time.LoadLocation(ServerInfo["timezone"])
 	timeZone := time.FixedZone("CST", 8*3600) // 东八区
 
 	timer := time.Now().In(timeZone)
@@ -346,7 +348,7 @@ func GetTimeDate(_format string) (date string) {
 func GetTimeS() int64 {
 	// 时区
 	timeZone, _ := time.LoadLocation(ServerInfo["timezone"])
-	//timeZone := time.FixedZone("CST", 8*3600) // 东八区
+	// timeZone := time.FixedZone("CST", 8*3600) // 东八区
 
 	return time.Now().In(timeZone).Unix()
 }
@@ -355,7 +357,7 @@ func GetTimeS() int64 {
 func GetTimeMS() int64 {
 	// 时区
 	timeZone, _ := time.LoadLocation(ServerInfo["timezone"])
-	//timeZone := time.FixedZone("CST", 8*3600) // 东八区
+	// timeZone := time.FixedZone("CST", 8*3600) // 东八区
 
 	timer := time.Now().In(timeZone)
 	timeMS := int64(timer.UnixNano() / 1e6)
@@ -366,7 +368,7 @@ func GetTimeMS() int64 {
 func GetTimeNS() int64 {
 	// 时区
 	timeZone, _ := time.LoadLocation(ServerInfo["timezone"])
-	//timeZone := time.FixedZone("CST", 8*3600) // 东八区
+	// timeZone := time.FixedZone("CST", 8*3600) // 东八区
 
 	timer := time.Now().In(timeZone)
 	timeNS := int64(timer.UnixNano() / 1e9)
@@ -376,7 +378,7 @@ func GetTimeNS() int64 {
 // DateToTimeS 秒日期时间戳转时间戳，s
 func DateToTimeS(_date string, format string) int64 {
 	var date string
-	if len(_date) == 0 { //给一个默认值
+	if len(_date) == 0 { // 给一个默认值
 		date = GetTimeDate("YmdHis")
 	} else {
 		date = _date
@@ -395,10 +397,10 @@ func DateToTimeS(_date string, format string) int64 {
 		layout = "20060102150405"
 	}
 
-	//日期转化为时间戳
-	loc, _ := time.LoadLocation("Local") //获取时区
+	// 日期转化为时间戳
+	loc, _ := time.LoadLocation("Local") // 获取时区
 	tmp, _ := time.ParseInLocation(layout, date, loc)
-	timestamp := tmp.Unix() //转化为时间戳 类型是int64
+	timestamp := tmp.Unix() // 转化为时间戳 类型是int64
 
 	return timestamp
 }
@@ -406,7 +408,7 @@ func DateToTimeS(_date string, format string) int64 {
 // TimeSToDate 秒时间戳转秒日期，ms
 func TimeSToDate(_timeS int64, format string) string {
 	var timeS int64
-	if _timeS == 0 { //给一个默认值
+	if _timeS == 0 { // 给一个默认值
 		timeS = GetTimeS()
 	} else {
 		timeS = _timeS
@@ -446,7 +448,7 @@ func DateToDate(_date string) string {
 func GetBeforeTime(_day int) (int64, string) {
 	// 时区
 	timeZone, _ := time.LoadLocation(ServerInfo["timezone"])
-	//timeZone := time.FixedZone("CST", 8*3600) // 东八区
+	// timeZone := time.FixedZone("CST", 8*3600) // 东八区
 	// 前n天
 	nowTime := time.Now().In(timeZone)
 	beforeTime := nowTime.AddDate(0, 0, _day)
@@ -479,19 +481,19 @@ func FilterToLower(html string) string {
 
 // FilterHTML 过滤html标签、去除\n\t\r\n。
 func FilterHTML(html string) string {
-	//将HTML标签全转换成小写
+	// 将HTML标签全转换成小写
 	re, _ := regexp.Compile("\\<[\\S\\s]+?\\>")
 	html = re.ReplaceAllStringFunc(html, strings.ToLower)
-	//去除STYLE
+	// 去除STYLE
 	re, _ = regexp.Compile("\\<style[\\S\\s]+?\\</style\\>")
 	html = re.ReplaceAllString(html, "")
-	//去除SCRIPT
+	// 去除SCRIPT
 	re, _ = regexp.Compile("\\<script[\\S\\s]+?\\</script\\>")
 	html = re.ReplaceAllString(html, "")
-	//去除所有尖括号内的HTML代码，并换成换行符
+	// 去除所有尖括号内的HTML代码，并换成换行符
 	re, _ = regexp.Compile("\\<[\\S\\s]+?\\>")
 	html = re.ReplaceAllString(html, "\n")
-	//去除连续的换行符
+	// 去除连续的换行符
 	re, _ = regexp.Compile("\\s{2,}")
 	html = re.ReplaceAllString(html, "\n")
 
@@ -673,7 +675,7 @@ func DecodeUrlBase64(_string string) string {
 func RequestGet(urlNoParams string, body map[string][]string) string {
 	params := url.Values{}
 	params = body
-	//params.Set("aaa", "aaa") // 设置参数
+	// params.Set("aaa", "aaa") // 设置参数
 	parseURL, err := url.Parse(urlNoParams)
 	if err != nil {
 		log.Println(err)
@@ -794,17 +796,16 @@ func Input(ctx *gin.Context, key string) string {
 
 	} else {
 		value, hasKey = "", false
-
 	}
 
 	if hasKey == false { // 参数不存在
 		_value = ""
 		// 当参数键不存在时，可能时是因为传来的参数的格式不正确。
-		ctx.Request.ParseMultipartForm(128) //保存表单缓存的内存大小128M
+		ctx.Request.ParseMultipartForm(128) // 保存表单缓存的内存大小128M
 		data := ctx.Request.Form
-		//Common.Log("当参数键不存在时，可能时是因为传来的参数的格式不正确。请查看传来的GET+POST全部数据：")
+		// Common.Log("当参数键不存在时，可能时是因为传来的参数的格式不正确。请查看传来的GET+POST全部数据：")
 		Log(data)
-		//Common.Log("axios请参考：项目资料/其他示例/axios-post.html")
+		// Common.Log("axios请参考：项目资料/其他示例/axios-post.html")
 	} else {
 		_value = value
 	}
@@ -816,21 +817,21 @@ func Input(ctx *gin.Context, key string) string {
 	}
 }
 
-//CreateFile 创建文件
+// CreateFile 创建文件
 func CreateFile(dir, fileName string) (*os.File, error) {
 	var err error
-	//目录不存在则创建
+	// 目录不存在则创建
 	if _, err = os.Stat(dir); err != nil {
-		if err = os.MkdirAll(dir, 0777); err != nil { //这里如果是0711权限 可能会导致其它线程，读取文件夹内内容出错
+		if err = os.MkdirAll(dir, 0777); err != nil { // 这里如果是0711权限 可能会导致其它线程，读取文件夹内内容出错
 			return nil, err
 		}
 	}
-	//创建文件
+	// 创建文件
 	var newFile *os.File
 	if newFile, err = os.Create(dir + "/" + fileName); err != nil {
 		return nil, err
 	}
-	//创建成功，返回文件指针
+	// 创建成功，返回文件指针
 	return newFile, nil
 }
 

@@ -21,6 +21,12 @@
 ├─tmp
 └─vendor
 ```
+#### 格式化代码
+```
+go get  mvdan.cc/gofumpt@latest
+
+gofumpt -l -w .
+```
 
 ####  如时使用指针类型
 

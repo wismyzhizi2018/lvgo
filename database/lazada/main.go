@@ -2,6 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	util "order/app/Helpers"
+	"os"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/color"
 	"github.com/wjpxxx/lazadago"
@@ -12,13 +20,6 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"log"
-	util "order/app/Helpers"
-	"os"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
 )
 
 var (
@@ -118,6 +119,7 @@ type Order_Main struct {
 	VoucherPlatform         string         `orm:"voucher_platform"`
 	OrderProduct            []OrderProduct `gorm:"foreignKey:OrderCode;references:OrderCode"`
 }
+
 type OrderProduct struct {
 	ID               int    `orm:"id"`
 	OrderCode        string `orm:"order_code"`
@@ -139,6 +141,7 @@ type OrderProduct struct {
 	DeclarePrice     string `orm:"declare_price"`
 	CustomsCode      string `orm:"customs_code"`
 }
+
 type LazadaAccount struct {
 	ID          int    `orm:"id"`
 	AccountName string `orm:"account_name"`
@@ -179,8 +182,8 @@ func main() {
 	logger, _ := zap.NewDevelopment()
 	zap.ReplaceGlobals(logger)
 	r.POST("/api/order/status_info", func(ctx *gin.Context) {
-		//获取所有token信息
-		//orderIds, _ := ctx.GetPostFormArray("order_code")
+		// 获取所有token信息
+		// orderIds, _ := ctx.GetPostFormArray("order_code")
 
 		var json RequestJonInfo
 		ctx.BindJSON(&json)
@@ -190,7 +193,7 @@ func main() {
 		for _, orderCode := range json.OrderCode {
 			orderIds = append(orderIds, fmt.Sprintf("%v", orderCode))
 		}
-		//查询所有
+		// 查询所有
 		var orderInfo []Order_Main
 		var accountInfo []LazadaAccount
 		if result := ProLazadaDB.Find(&accountInfo); result.RowsAffected == 0 {
@@ -206,18 +209,18 @@ func main() {
 		}
 		var outInfo []*OutOrderInfo
 
-		//done := make(chan bool) //通道
+		// done := make(chan bool) //通道
 
-		//执行的 这里要注意  需要指针类型传入  否则会异常
+		// 执行的 这里要注意  需要指针类型传入  否则会异常
 		wg := &sync.WaitGroup{}
-		//并发控制 10
+		// 并发控制 10
 		limiter := make(chan struct{}, 20)
 		defer close(limiter)
 
 		response := make(chan *OutOrderInfo, 20)
 		wgResponse := &sync.WaitGroup{}
-		//var result []string
-		//处理结果 接收结果
+		// var result []string
+		// 处理结果 接收结果
 		go func() {
 			wgResponse.Add(1)
 			for rc := range response {
@@ -248,30 +251,31 @@ func main() {
 				outRow.OrderProduct = append(outRow.OrderProduct, outOpRow)
 			}
 			orderId, _ := strconv.ParseInt(orderRow.StoreOrderCode, 10, 64)
-			//计数器
+			// 计数器
 			wg.Add(1)
 			//	cmd := &LazadaInfo{AccessToken: token, OrderId: orderId, Country: country, OutInfo: outRow, Wg: &wg, Ch: ch}
-			//并发控制 20
+			// 并发控制 20
 			limiter <- struct{}{}
-			//发送请求
+			// 发送请求
 			go pushLazadaGetOrderItems(token, orderId, country, outRow, wg, response, limiter)
-			//go cmd.getLazadaGetOrderItems()
+			// go cmd.getLazadaGetOrderItems()
 		}
 		//}
 		//发送任务
 		wg.Wait()
-		//fmt.Println("发送完毕")
-		close(response) //关闭 并不影响接收遍历
-		//处理接收结果
+		// fmt.Println("发送完毕")
+		close(response) // 关闭 并不影响接收遍历
+		// 处理接收结果
 		wgResponse.Wait()
-		//fmt.Println("请求结束")
-		//fmt.Println(result)
-		//outInfo = append(outInfo, <-lazadaInfo)
+		// fmt.Println("请求结束")
+		// fmt.Println(result)
+		// outInfo = append(outInfo, <-lazadaInfo)
 		util.SuccessJson("请求成功", outInfo)(ctx)
 		return
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
+
 func consumer(in <-chan string) {
 	for num := range in {
 		fmt.Println(num)
@@ -290,18 +294,19 @@ type LazadaInfo struct {
 func (_this *LazadaInfo) getLazadaGetOrderItems() {
 	color.Danger.Println(<-_this.Ch)
 }
+
 func pushLazadaGetOrderItems(AccessToken string, OrderId int64, Country string, OutInfo OutOrderInfo, Wg *sync.WaitGroup, response chan *OutOrderInfo, limiter chan struct{}) {
-	//计数器-1
+	// 计数器-1
 	defer Wg.Done()
-	//AccessToken := _this.AccessToken
-	//OrderId := _this.OrderId
-	//Country := _this.Country
-	//OutInfo := _this.OutInfo
+	// AccessToken := _this.AccessToken
+	// OrderId := _this.OrderId
+	// Country := _this.Country
+	// OutInfo := _this.OutInfo
 	out := &OutOrderInfo{}
 	if AccessToken != "" {
 		api := lazadago.NewApi(&lazadaConfig.Config{
 			AppKey:      "xxxx",
-			AccessToken: AccessToken, //刚开始可以为空字符串
+			AccessToken: AccessToken, // 刚开始可以为空字符串
 			AppSecret:   "xxxx",
 			Country:     Country,
 		})
@@ -320,17 +325,17 @@ func pushLazadaGetOrderItems(AccessToken string, OrderId int64, Country string, 
 				}
 				out.OrderProduct = append(out.OrderProduct, opItem)
 			}
-			//zap.S().Infof("%s", out)
+			// zap.S().Infof("%s", out)
 		} else {
-			//zap.S().Infof("%s", out)
+			// zap.S().Infof("%s", out)
 		}
-		//结果数据传入管道
-		//response <- fmt.Sprintf("%s", out)
+		// 结果数据传入管道
+		// response <- fmt.Sprintf("%s", out)
 		response <- out
 	} else {
 		response <- &OutInfo
 	}
-	//释放一个并发
+	// 释放一个并发
 	<-limiter
 }
 

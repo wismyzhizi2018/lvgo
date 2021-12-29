@@ -14,7 +14,6 @@ func ItemSaver(
 	client, err := elastic.NewClient(
 		// Must turn off sniff in docker
 		elastic.SetSniff(false))
-
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +41,8 @@ func ItemSaver(
 
 func Save(
 	client *elastic.Client, index string,
-	item engine.Item) error {
-
+	item engine.Item,
+) error {
 	if item.Type == "" {
 		return errors.New("must supply Type")
 	}

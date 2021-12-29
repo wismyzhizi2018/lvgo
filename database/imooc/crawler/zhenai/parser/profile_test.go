@@ -11,7 +11,6 @@ import (
 func TestParseProfile(t *testing.T) {
 	contents, err := ioutil.ReadFile(
 		"profile_test_data.html")
-
 	if err != nil {
 		panic(err)
 	}

@@ -6,6 +6,10 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"os"
+	"path"
+	"time"
+
 	"github.com/CodyGuo/dingtalk"
 	"github.com/golang/glog"
 	"github.com/gookit/color"
@@ -15,9 +19,6 @@ import (
 	"github.com/namsral/flag"
 	"github.com/robfig/cron"
 	"github.com/spf13/viper"
-	"os"
-	"path"
-	"time"
 )
 
 type YamlConfig struct {
@@ -25,10 +26,12 @@ type YamlConfig struct {
 	Ding    DingApp  `yaml:"ding"`
 	Config  []Config `yaml:"config"`
 }
+
 type DingApp struct {
 	Webhook   string `yaml:"webhook"`
 	Secretkey string `yaml:"secretkey"`
 }
+
 type Config struct {
 	Name     string `yaml:"name"`
 	Time     int64  `yaml:"time"`
@@ -125,9 +128,10 @@ func (this *MyCircularQueue) IsFull() bool {
 	}
 	return false
 }
+
 func (this *MyCircularQueue) IsExists(key string) bool {
 	for _, v := range this.Queue {
-		//fmt.Println(v)
+		// fmt.Println(v)
 		if v == key {
 			return true
 		}
@@ -147,13 +151,16 @@ func (this *MyCircularQueue) push(key string) bool {
 
 //go:generate goversioninfo -icon=resource/icon.ico -manifest=resource/goversioninfo.exe.manifest
 var endpoint = flag.String("host", "config.nantang-tech.com", "nacos host")
-var namespaceId = flag.String("namespace_id", "<namespace_id>", "nacos namespace Id")
-var accessKey = flag.String("username", "", "nacos access username")
-var secretKey = flag.String("password", "", "nacos secret password")
-var dataId = flag.String("data_id", "order-config.yaml", "nacos secret key")
-var group = flag.String("group", "production", "nacos secret key")
-var port = flag.Uint64("port", 80, "nacos port")
-var c YamlConfig
+
+var (
+	namespaceId = flag.String("namespace_id", "<namespace_id>", "nacos namespace Id")
+	accessKey   = flag.String("username", "", "nacos access username")
+	secretKey   = flag.String("password", "", "nacos secret password")
+	dataId      = flag.String("data_id", "order-config.yaml", "nacos secret key")
+	group       = flag.String("group", "production", "nacos secret key")
+	port        = flag.Uint64("port", 80, "nacos port")
+	c           YamlConfig
+)
 
 func main() {
 	flag.Parse()
@@ -175,9 +182,9 @@ func main() {
 		}
 	}
 
-	cron2 := cron.New() //创建一个cron实例
+	cron2 := cron.New() // 创建一个cron实例
 	queueObject := Constructor(10)
-	//执行定时任务（每5秒执行一次）
+	// 执行定时任务（每5秒执行一次）
 	err := cron2.AddFunc("*/5 * * * * *", func() {
 		//
 		var content []Config
@@ -188,7 +195,7 @@ func main() {
 				diffTime := nowTime - lastTime
 				if diffTime > item.Time {
 					fmt.Printf("%s大于设置时间%v秒\n", item.Path, item.Time)
-					//需要获取推送的订单信息
+					// 需要获取推送的订单信息
 					item.LastTime = timeToData(lastTime)
 					item.NowTime = timeToData(nowTime)
 					content = append(content, item)
@@ -212,7 +219,7 @@ func main() {
 				txt += fmt.Sprintf(" **文件时间：** %s\n\n", v.LastTime)
 				txt += fmt.Sprintf(" **当前时间：** %s\n\n", v.NowTime)
 				cachekey += fmt.Sprintf(" **监控时差：** %v秒\n\n", v.Time) + fmt.Sprintf(" **监控名称：** %s\n\n", v.Name) + fmt.Sprintf(" **文件时间：** %s\n\n", v.LastTime) + fmt.Sprintf(" **监控文件：** %s\n\n", v.Path) + fmt.Sprintf(" **当前时间：** %v\n\n", time.Now().Day())
-				//fmt.Println(cachekey)
+				// fmt.Println(cachekey)
 				bt.WriteString(txt)
 			}
 			key := hmacSha256(cachekey, c.Ding.Secretkey)
@@ -233,13 +240,12 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	//启动/关闭
+	// 启动/关闭
 	cron2.Start()
 	defer cron2.Stop()
 	select {
-	//查询语句，保持程序运行，在这里等同于for{}
+	// 查询语句，保持程序运行，在这里等同于for{}
 	}
-
 }
 
 //
@@ -290,19 +296,19 @@ func InitNACOS() {
 	mainDirectory, _ := os.Getwd()
 	logFilePath := mainDirectory + "/tmp/nacos/log/"
 	logFileName := "nacos.log"
-	//日志文件
+	// 日志文件
 	fileName := path.Join(logFilePath, logFileName)
-	//写入文件
+	// 写入文件
 	_, err := os.Stat(fileName)
 	if !(err == nil || os.IsExist(err)) {
 		var err error
-		//目录不存在则创建
+		// 目录不存在则创建
 		if _, err = os.Stat(logFilePath); err != nil {
-			if err = os.MkdirAll(logFilePath, 0777); err != nil { //这里如果是0711权限 可能会导致其它线程，读取文件夹内内容出错
+			if err = os.MkdirAll(logFilePath, 0777); err != nil { // 这里如果是0711权限 可能会导致其它线程，读取文件夹内内容出错
 				color.Danger.Println("Create log dir err :", err)
 			}
 		}
-		//创建文件
+		// 创建文件
 		if _, err = os.Create(fileName); err != nil {
 			color.Danger.Println("Create log file err :", err)
 		}
@@ -326,7 +332,7 @@ func InitNACOS() {
 	}
 	// 创建clientConfig的另一种方式
 	clientConfig := *constant.NewClientConfig(
-		constant.WithNamespaceId("7bbe2bee-9157-43e1-9b9c-2e19b0a102a6"), //当namespace是public时，此处填空字符串。
+		constant.WithNamespaceId("7bbe2bee-9157-43e1-9b9c-2e19b0a102a6"), // 当namespace是public时，此处填空字符串。
 		constant.WithTimeoutMs(5000),
 		constant.WithNotLoadCacheAtStart(true),
 		constant.WithLogDir("/tmp/nacos/log"),
@@ -362,10 +368,10 @@ func InitNACOS() {
 		fmt.Println(err.Error())
 		os.Exit(200)
 	}
-	color.Info.Println(content) //字符串 - yaml
+	color.Info.Println(content) // 字符串 - yaml
 	color.Debug.Println("使用NACOS加载配置文件")
 	viper.SetConfigType("yaml")
-	//读取
+	// 读取
 	if err := viper.ReadConfig(bytes.NewBuffer([]byte(content))); err != nil {
 		color.Danger.Println("env read Error = ", err.Error(), "运行中断")
 		fmt.Println(err.Error())
@@ -381,7 +387,7 @@ func InitNACOS() {
 				DataId: nacosConf.DataId,
 				Group:  nacosConf.Group,
 				OnChange: func(namespace, group, dataId, data string) {
-					//fmt.Println("group:" + group + ", dataId:" + dataId + ", data:" + data)
+					// fmt.Println("group:" + group + ", dataId:" + dataId + ", data:" + data)
 					content, err := configClient.GetConfig(vo.ConfigParam{
 						DataId: nacosConf.DataId,
 						Group:  nacosConf.Group,
@@ -391,10 +397,10 @@ func InitNACOS() {
 						fmt.Println(err.Error())
 						os.Exit(200)
 					}
-					color.Info.Println(content) //字符串 - yaml
+					color.Info.Println(content) // 字符串 - yaml
 					color.Debug.Println("使用NACOS加载配置文件")
 					viper.SetConfigType("yaml")
-					//读取
+					// 读取
 					if err := viper.ReadConfig(bytes.NewBuffer([]byte(content))); err != nil {
 						color.Danger.Println("env read Error = ", err.Error(), "运行中断")
 						fmt.Println(err.Error())

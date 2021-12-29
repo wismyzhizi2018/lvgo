@@ -5,8 +5,7 @@ import (
 	"testing"
 )
 
-type Pet struct {
-}
+type Pet struct{}
 
 func (p *Pet) Speak() {
 	fmt.Print("...")

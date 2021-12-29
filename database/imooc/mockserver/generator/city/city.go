@@ -49,7 +49,6 @@ func (g *Generator) HandleRequest(c *gin.Context) {
 
 func (g *Generator) handleRequest(c *gin.Context, p params) {
 	err := g.generate(p, c.Writer)
-
 	if err != nil {
 		log.Printf("Cannot generate page for city %q and page %d: %v.", p.City, p.Page, err)
 		c.Status(http.StatusInternalServerError)

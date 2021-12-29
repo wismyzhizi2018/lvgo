@@ -30,7 +30,8 @@ type point struct {
 }
 
 var dirs = [4]point{
-	{-1, 0}, {0, -1}, {1, 0}, {0, 1}}
+	{-1, 0}, {0, -1}, {1, 0}, {0, 1},
+}
 
 func (p point) add(r point) point {
 	return point{p.i + r.i, p.j + r.j}
@@ -83,8 +84,7 @@ func walk(maze [][]int,
 			}
 
 			curSteps, _ := cur.at(steps)
-			steps[next.i][next.j] =
-				curSteps + 1
+			steps[next.i][next.j] = curSteps + 1
 
 			Q = append(Q, next)
 		}

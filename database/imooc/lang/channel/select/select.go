@@ -36,8 +36,8 @@ func createWorker(id int) chan<- int {
 }
 
 func main() {
-	var c1, c2 = generator(), generator()
-	var worker = createWorker(0)
+	c1, c2 := generator(), generator()
+	worker := createWorker(0)
 
 	var values []int
 	tm := time.After(10 * time.Second)

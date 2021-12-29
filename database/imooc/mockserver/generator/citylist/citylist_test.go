@@ -17,7 +17,6 @@ func TestGenerate(t *testing.T) {
 
 	var b bytes.Buffer
 	err := g.generate(&b)
-
 	if err != nil {
 		t.Fatalf("Cannot generate content: %v.", err)
 	}

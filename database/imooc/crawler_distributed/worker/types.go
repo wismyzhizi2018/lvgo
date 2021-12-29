@@ -2,7 +2,6 @@ package worker
 
 import (
 	"errors"
-
 	"fmt"
 	"log"
 

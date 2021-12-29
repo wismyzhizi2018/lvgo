@@ -1,10 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
-
-	"bufio"
 
 	"imooc.com/ccmouse/learngo/lang/functional/fib"
 )
@@ -23,7 +22,6 @@ func tryDefer() {
 func writeFile(filename string) {
 	file, err := os.OpenFile(filename,
 		os.O_EXCL|os.O_CREATE|os.O_WRONLY, 0666)
-
 	if err != nil {
 		if pathError, ok := err.(*os.PathError); !ok {
 			panic(err)

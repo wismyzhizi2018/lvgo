@@ -28,7 +28,6 @@ func errWrapper(
 		}()
 
 		err := handler(writer, request)
-
 		if err != nil {
 			log.Printf("Error occurred "+
 				"handling request: %s",

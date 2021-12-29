@@ -43,7 +43,7 @@ func createServiceDiscovery(regAddr string) (client.ServiceDiscovery, error) {
 	regAddr = regAddr[i+3:]
 
 	switch regType {
-	case "peer2peer": //peer2peer://127.0.0.1:8972
+	case "peer2peer": // peer2peer://127.0.0.1:8972
 		return client.NewPeer2PeerDiscovery("tcp@"+regAddr, "")
 	case "multiple":
 		var pairs []*client.KVPair

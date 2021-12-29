@@ -8,7 +8,6 @@ import (
 func TestParseCarModel(t *testing.T) {
 	contents, err := ioutil.ReadFile(
 		"carmodel_test_data.html")
-
 	if err != nil {
 		panic(err)
 	}

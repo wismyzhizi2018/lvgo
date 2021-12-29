@@ -2,18 +2,19 @@ package main
 
 import (
 	"fmt"
-	"github.com/namsral/flag"
-	"go.uber.org/zap"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-	"gorm.io/gorm/schema"
 	"hash/crc32"
 	"log"
 	"math"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/namsral/flag"
+	"go.uber.org/zap"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 var orderCode = flag.String("order_code", "", "please input order code")
@@ -110,7 +111,7 @@ type Order_Main struct {
 }
 
 func (user *Order_Main) BeforeSave(scope *gorm.DB) (err error) {
-	//if pw, err := bcrypt.GenerateFromPassword(user.Password, 0); err == nil {
+	// if pw, err := bcrypt.GenerateFromPassword(user.Password, 0); err == nil {
 	user.DatePayment = timeToData(GetTimestamp(user.DatePayment))
 	user.CreatedAt = timeToData(GetTimestamp(user.CreatedAt))
 	user.UpdatedAt = timeToData(GetTimestamp(user.UpdatedAt))
@@ -120,7 +121,7 @@ func (user *Order_Main) BeforeSave(scope *gorm.DB) (err error) {
 	user.UpdateTrackTime = timeToData(GetTimestamp(user.UpdateTrackTime))
 	user.UpdateFollowTime = timeToData(GetTimestamp(user.UpdateFollowTime))
 	user.OverTimeLeft = timeToData(GetTimestamp(user.OverTimeLeft))
-	//fmt.Println(user)
+	// fmt.Println(user)
 	return nil
 }
 
@@ -154,10 +155,10 @@ type OrderProduct struct {
 }
 
 func (user *OrderProduct) BeforeSave(scope *gorm.DB) (err error) {
-	//if pw, err := bcrypt.GenerateFromPassword(user.Password, 0); err == nil {
+	// if pw, err := bcrypt.GenerateFromPassword(user.Password, 0); err == nil {
 	user.CreatedAt = timeToData(GetTimestamp(user.CreatedAt))
 	user.UpdatedAt = timeToData(GetTimestamp(user.UpdatedAt))
-	//fmt.Println(user)
+	// fmt.Println(user)
 	return nil
 }
 
@@ -175,9 +176,9 @@ type OrderStatusHistory struct {
 }
 
 func (user *OrderStatusHistory) BeforeSave(scope *gorm.DB) (err error) {
-	//if pw, err := bcrypt.GenerateFromPassword(user.Password, 0); err == nil {
+	// if pw, err := bcrypt.GenerateFromPassword(user.Password, 0); err == nil {
 	user.CreatedAt = timeToData(GetTimestamp(user.CreatedAt))
-	//fmt.Println(user)
+	// fmt.Println(user)
 	return nil
 }
 
@@ -254,16 +255,15 @@ func main() {
 	}
 
 	zap.S().Infof("结束数据迁移[%s]", time.Now().Format("2006-01-02 15:04:05"))
-
 }
 
 func initProDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "101.132.43.121",
 		Port:     3306,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order",
+		User:     "nt_order",
+		Password: "8Iwi+GEimp3cmwEphIVe",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -291,11 +291,11 @@ func initProDatabase() {
 
 func initTestDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "192.168.0.242",
 		Port:     3311,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order",
+		User:     "test",
+		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -319,8 +319,9 @@ func initTestDatabase() {
 	if err != nil {
 		panic(err)
 	}
-	//DevDB.Callback().Create().Replace("orm:updated_at", updateTimeStampForUpdateCallback)
+	// DevDB.Callback().Create().Replace("orm:updated_at", updateTimeStampForUpdateCallback)
 }
+
 func GetTimestamp(change string) int64 {
 	change1 := strings.Replace(change, "T", " ", 1)
 	change2 := strings.Replace(change1, "+08:00", "", 1)
@@ -331,11 +332,11 @@ func GetTimestamp(change string) int64 {
 
 func initProLogDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "101.132.43.121",
 		Port:     3306,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order_log",
+		User:     "nt_order",
+		Password: "8Iwi+GEimp3cmwEphIVe",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -363,11 +364,11 @@ func initProLogDatabase() {
 
 func initTestLogDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "192.168.0.242",
 		Port:     3311,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order_log",
+		User:     "test",
+		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -391,5 +392,5 @@ func initTestLogDatabase() {
 	if err != nil {
 		panic(err)
 	}
-	//DevDB.Callback().Create().Replace("orm:updated_at", updateTimeStampForUpdateCallback)
+	// DevDB.Callback().Create().Replace("orm:updated_at", updateTimeStampForUpdateCallback)
 }

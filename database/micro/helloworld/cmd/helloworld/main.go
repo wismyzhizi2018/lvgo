@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
+	"helloworld/internal/conf"
 	"os"
 
-	"helloworld/internal/conf"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"

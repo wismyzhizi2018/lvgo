@@ -25,7 +25,7 @@ func variableInitialValue() {
 }
 
 func variableTypeDeduction() {
-	var a, b, c, s = 3, 4, true, "def"
+	a, b, c, s := 3, 4, true, "def"
 	fmt.Println(a, b, c, s)
 }
 

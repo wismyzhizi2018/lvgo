@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 	hello_grpc "hello_grpc/service"
 	"log"
 	"net"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type server struct{}

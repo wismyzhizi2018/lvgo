@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/apache/rocketmq-client-go/v2"
 	"github.com/apache/rocketmq-client-go/v2/consumer"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
-	"os"
-	"time"
 )
 
 func main() {
@@ -19,7 +20,7 @@ func main() {
 		for i := range messages {
 			fmt.Printf("subscribe callback: %v \n", messages[i])
 		}
-		//这个相当于消费者 消息ack，如果失败可以返回 consumer.ConsumeRetryLater
+		// 这个相当于消费者 消息ack，如果失败可以返回 consumer.ConsumeRetryLater
 		return consumer.ConsumeSuccess, nil
 	})
 	if err != nil {

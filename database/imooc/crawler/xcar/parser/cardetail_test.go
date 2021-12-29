@@ -11,7 +11,6 @@ import (
 func TestParseCarDetail(t *testing.T) {
 	contents, err := ioutil.ReadFile(
 		"cardetail_test_data.html")
-
 	if err != nil {
 		panic(err)
 	}

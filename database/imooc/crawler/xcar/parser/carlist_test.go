@@ -8,7 +8,6 @@ import (
 func TestParseCarList(t *testing.T) {
 	contents, err := ioutil.ReadFile(
 		"carlist_test_data.html")
-
 	if err != nil {
 		panic(err)
 	}
@@ -41,10 +40,10 @@ func TestParseCarList(t *testing.T) {
 		}
 	}
 	for i, url := range expectedCarListUrls {
-		if result.Requests[carModelSize + i].Url != url {
+		if result.Requests[carModelSize+i].Url != url {
 			t.Errorf("expected url #%d: %s; but "+
 				"was %s",
-				carModelSize + i, url, result.Requests[i].Url)
+				carModelSize+i, url, result.Requests[i].Url)
 		}
 	}
 }

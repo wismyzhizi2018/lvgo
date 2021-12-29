@@ -24,7 +24,6 @@ func TestGenerate(t *testing.T) {
 	rand.Seed(34534)
 	var b bytes.Buffer
 	err := g.generate(12345, &b)
-
 	if err != nil {
 		t.Fatalf("Cannot generate content: %v.", err)
 	}

@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+	"log"
+
 	"github.com/smallnest/rpcx/share"
 
 	"github.com/smallnest/rpcx/client"
-	"log"
 )
 
 type Args struct {
@@ -19,7 +20,7 @@ type Reply struct {
 }
 
 func main() {
-	var addr = "tcp@127.0.0.1:8972"
+	addr := "tcp@127.0.0.1:8972"
 	d, _ := client.NewPeer2PeerDiscovery(addr, "")
 	xclient := client.NewXClient("Arith", client.Failtry, client.RandomSelect, d, client.DefaultOption)
 	defer xclient.Close()
@@ -28,9 +29,9 @@ func main() {
 		B: 20,
 	}
 	reply := &Reply{}
-	//传给服务器元数据
+	// 传给服务器元数据
 	ctx := context.WithValue(context.Background(), share.ReqMetaDataKey, map[string]string{"ip": "127.0.0.1"})
-	//读取客户端的数据
+	// 读取客户端的数据
 	ctx = context.WithValue(ctx, share.ResMetaDataKey, make(map[string]string))
 	err := xclient.Call(ctx, "Mul", args, reply)
 	if err != nil {

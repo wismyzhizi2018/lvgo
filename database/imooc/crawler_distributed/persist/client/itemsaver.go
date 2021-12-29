@@ -29,7 +29,6 @@ func ItemSaver(
 			err := client.Call(
 				config.ItemSaverRpc,
 				item, &result)
-
 			if err != nil {
 				log.Printf("Item Saver: error "+
 					"saving item %v: %v",

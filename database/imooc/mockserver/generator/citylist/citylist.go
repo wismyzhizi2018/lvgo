@@ -19,7 +19,6 @@ type Generator struct {
 // HandleRequest is the gin request handler for citylist generation.
 func (g *Generator) HandleRequest(c *gin.Context) {
 	err := g.generate(c.Writer)
-
 	if err != nil {
 		log.Printf("Cannot generate page for citylist: %v.", err)
 		c.Status(http.StatusInternalServerError)

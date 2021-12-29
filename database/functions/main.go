@@ -17,6 +17,7 @@ func add2(base int) iAddr {
 		return base + i, add2(base + i)
 	}
 }
+
 func main() {
 	a := addr()
 	for i := 0; i < 100; i++ {

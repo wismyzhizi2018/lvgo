@@ -19,7 +19,7 @@ var key string = "name"
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
-	//WithValue传递元数据
+	// WithValue传递元数据
 	//    valueCtx:=context.WithValue(ctx,key,"【监控1】")
 	go watch(context.WithValue(ctx, key, "【监控1】"))
 	go watch(context.WithValue(ctx, key, "【监控2】"))
@@ -28,7 +28,7 @@ func main() {
 	time.Sleep(10 * time.Second)
 	fmt.Println("可以了，通知监控停止")
 	cancel()
-	//为了检测监控过是否停止，如果没有监控输出，就表示停止了
+	// 为了检测监控过是否停止，如果没有监控输出，就表示停止了
 	time.Sleep(5 * time.Second)
 }
 

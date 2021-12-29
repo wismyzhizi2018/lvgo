@@ -20,6 +20,5 @@ func main() {
 	fmt.Println("mutexWaiterShift的值", mutexWaiterShift)
 	go func() {
 		fmt.Println("打印不?")
-
 	}()
 }

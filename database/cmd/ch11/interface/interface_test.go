@@ -6,8 +6,7 @@ type Programmer interface {
 	WriteHelloWorld() string
 }
 
-type GoProgrammer struct {
-}
+type GoProgrammer struct{}
 
 func (g *GoProgrammer) WriteHelloWorld() string {
 	return "fmt.Println(\"Hello World\")"

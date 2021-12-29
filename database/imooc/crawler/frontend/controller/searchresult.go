@@ -73,7 +73,6 @@ func (h SearchResultHandler) getSearchResult(
 			rewriteQueryString(q))).
 		From(from).
 		Do(context.Background())
-
 	if err != nil {
 		return result, err
 	}
@@ -85,12 +84,10 @@ func (h SearchResultHandler) getSearchResult(
 	if result.Start == 0 {
 		result.PrevFrom = -1
 	} else {
-		result.PrevFrom =
-			(result.Start - 1) /
-				pageSize * pageSize
+		result.PrevFrom = (result.Start - 1) /
+			pageSize * pageSize
 	}
-	result.NextFrom =
-		result.Start + len(result.Items)
+	result.NextFrom = result.Start + len(result.Items)
 
 	return result, nil
 }

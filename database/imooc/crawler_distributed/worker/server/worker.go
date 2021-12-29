@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
-
-	"log"
-
 	"flag"
+	"fmt"
+	"log"
 
 	"imooc.com/ccmouse/learngo/crawler/fetcher"
 	"imooc.com/ccmouse/learngo/crawler_distributed/rpcsupport"

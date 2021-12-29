@@ -36,7 +36,6 @@ func TestSave(t *testing.T) {
 	// here using docker go client.
 	client, err := elastic.NewClient(
 		elastic.SetSniff(false))
-
 	if err != nil {
 		panic(err)
 	}
@@ -55,7 +54,6 @@ func TestSave(t *testing.T) {
 		Type(expected.Type).
 		Id(expected.Id).
 		Do(context.Background())
-
 	if err != nil {
 		panic(err)
 	}

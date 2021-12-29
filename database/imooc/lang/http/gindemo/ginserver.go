@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"math/rand"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 const keyRequestId = "requestId"
@@ -33,7 +34,7 @@ func main() {
 
 	r.GET("/ping", func(c *gin.Context) {
 		h := gin.H{
-			"message":   "pong",
+			"message": "pong",
 		}
 		if rid, exists := c.Get(keyRequestId); exists {
 			h[keyRequestId] = rid

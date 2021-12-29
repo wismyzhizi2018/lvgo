@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+
 	"github.com/smallnest/rpcx/server"
 	"github.com/smallnest/rpcx/share"
 )
@@ -26,6 +27,7 @@ func (t *Arith) Mul(ctx context.Context, args *Args, reply *Reply) error {
 	reply.Message = "返回成功"
 	return nil
 }
+
 func main() {
 	s := server.NewServer()
 	s.RegisterName("Arith", new(Arith), "")

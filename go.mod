@@ -9,6 +9,8 @@ require (
 	github.com/apache/rocketmq-client-go v1.2.4 // indirect
 	github.com/apache/rocketmq-client-go/v2 v2.1.0
 	github.com/arl/statsviz v0.4.0
+	github.com/chromedp/cdproto v0.0.0-20211205231339-d2673e93eee4
+	github.com/chromedp/chromedp v0.7.6
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/fatih/color v1.12.0 // indirect
@@ -32,7 +34,7 @@ require (
 	github.com/namsral/flag v1.7.4-pre
 	github.com/opentracing/opentracing-go v1.1.1-0.20190913142402-a7454ce5950e
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
-	github.com/pdfcpu/pdfcpu v0.3.12
+	github.com/pdfcpu/pdfcpu v0.3.12 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron v1.2.0
 	github.com/robfig/cron/v3 v3.0.0 // indirect
@@ -51,8 +53,6 @@ require (
 	go.mongodb.org/mongo-driver v1.7.0
 	go.uber.org/zap v1.17.0
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
-	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
-	golang.org/x/sys v0.0.0-20210819135213-f52c844e1c1c // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6 // indirect
 	google.golang.org/genproto v0.0.0-20210820002220-43fce44e7af1 // indirect
@@ -60,6 +60,7 @@ require (
 	gopkg.me/selling-partner-api-sdk v0.0.0-20210707065407-720a4a068b4f
 	gorm.io/driver/mysql v1.1.1
 	gorm.io/gorm v1.21.12
+	mvdan.cc/gofumpt v0.2.1 // indirect
 )
 
 //go mod download

@@ -3,16 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/apache/rocketmq-client-go/v2"
-	"github.com/apache/rocketmq-client-go/v2/primitive"
-	"github.com/apache/rocketmq-client-go/v2/producer"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/apache/rocketmq-client-go/v2"
+	"github.com/apache/rocketmq-client-go/v2/primitive"
+	"github.com/apache/rocketmq-client-go/v2/producer"
 )
 
-type TestListener struct {
-}
+type TestListener struct{}
 
 func (t TestListener) ExecuteLocalTransaction(message *primitive.Message) primitive.LocalTransactionState {
 	fmt.Println("开始执行1111")

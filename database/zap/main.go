@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -22,14 +23,13 @@ func main() {
 
 	res := newget(url, headers)
 	fmt.Println(res)
-
 }
 
 func newget(url string, headers map[string]string) string {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 	}
-	//add params
+	// add params
 	// q := req.URL.Query()
 	// if params != nil {
 	//  for key, val := range params {
@@ -37,7 +37,7 @@ func newget(url string, headers map[string]string) string {
 	//  }
 	//  req.URL.RawQuery = q.Encode()
 	// }
-	//add headers
+	// add headers
 	if headers != nil {
 		for key, val := range headers {
 			fmt.Println(key)

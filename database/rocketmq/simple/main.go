@@ -3,14 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
+	"strconv"
+
 	"github.com/apache/rocketmq-client-go/v2"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/apache/rocketmq-client-go/v2/producer"
-	"math/rand"
-	"strconv"
 )
 
-//延迟消息
+// 延迟消息
 func main() {
 	p, err := rocketmq.NewProducer(producer.WithNameServer([]string{"61.171.40.222:9876"}))
 	if err != nil {

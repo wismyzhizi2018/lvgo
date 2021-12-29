@@ -4,10 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
-	"net/http"
-
 	"log"
-
+	"net/http"
 	"time"
 
 	"golang.org/x/net/html/charset"

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"time"
 
 	"imooc.com/ccmouse/learngo/lang/retriever/mock"
@@ -48,7 +47,8 @@ func main() {
 	var r Retriever
 
 	mockRetriever := mock.Retriever{
-		Contents: "this is a fake imooc.com"}
+		Contents: "this is a fake imooc.com",
+	}
 	r = &mockRetriever
 	inspect(r)
 

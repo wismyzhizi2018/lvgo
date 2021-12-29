@@ -2,12 +2,9 @@ package main
 
 import (
 	"errors"
-	"net/rpc"
-
-	"log"
-
 	"flag"
-
+	"log"
+	"net/rpc"
 	"strings"
 
 	"imooc.com/ccmouse/learngo/crawler/config"

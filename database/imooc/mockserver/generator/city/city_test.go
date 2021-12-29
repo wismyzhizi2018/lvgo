@@ -23,7 +23,6 @@ func TestGenerate(t *testing.T) {
 		City: "fuxin",
 		Page: 34,
 	}, &b)
-
 	if err != nil {
 		t.Fatalf("Cannot generate content: %v.", err)
 	}

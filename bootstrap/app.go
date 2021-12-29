@@ -44,7 +44,7 @@ func (app *Application) App() {
 	HttpServer := app.HttpServer
 	// 加载配置信息
 	config.InitEmbedData(app.BytesContent)
-	config.InitNACOS()
+	//config.InitNACOS()
 	mainDirectory, _ := os.Getwd()
 	mainDirectory = mainDirectory + "/"
 	bytes, err := ioutil.ReadFile(mainDirectory + "config/banner.txt")

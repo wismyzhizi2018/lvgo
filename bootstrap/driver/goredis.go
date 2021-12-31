@@ -12,8 +12,6 @@ import (
 var RedisDb *redis.Client
 
 func InitRedis() {
-	color.Debug.Println("尝试连接GoRedis...")
-
 	rdbConfig := config.GetRedisConfig()
 
 	RedisDb = redis.NewClient(&redis.Options{ // 连接服务

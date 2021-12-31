@@ -221,16 +221,16 @@ func main() {
 		var orderInfo Order_Main
 		var orderProductInfo []OrderProduct
 		var orderLogInfo []OrderStatusHistory
-		if result := ProLogDB.Table(getTableName(v)).Where(map[string]interface{}{"order_code": v}).Find(&orderLogInfo); result.RowsAffected == 0 {
+		if result := ProLogDB.Table(getTableName(v)).Where(map[string]interface{}{"order_code": v}).Limit(1).Find(&orderLogInfo); result.RowsAffected == 0 {
 			zap.S().Infof("订单日志信息[%s]不存在", v)
 			os.Exit(200)
 		}
-		if result := ProDB.Where(map[string]interface{}{"order_code": v}).First(&orderInfo); result.RowsAffected == 0 {
+		if result := ProDB.Where(map[string]interface{}{"order_code": v}).Limit(1).First(&orderInfo); result.RowsAffected == 0 {
 			zap.S().Infof("订单信息[%s]不存在", v)
 			os.Exit(200)
 		}
 
-		if result := ProDB.Where(map[string]interface{}{"order_code": v}).Find(&orderProductInfo); result.RowsAffected == 0 {
+		if result := ProDB.Where(map[string]interface{}{"order_code": v}).Limit(1).Find(&orderProductInfo); result.RowsAffected == 0 {
 			zap.S().Infof("订单产品信息[%s]不存在", v)
 			os.Exit(200)
 		}
@@ -259,11 +259,11 @@ func main() {
 
 func initProDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "101.132.43.121",
 		Port:     3306,
 		Name:     "nt_order",
 		User:     "nt_order",
-		Password: "xxxx",
+		Password: "8Iwi+GEimp3cmwEphIVe",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -291,11 +291,11 @@ func initProDatabase() {
 
 func initTestDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "192.168.0.242",
 		Port:     3311,
 		Name:     "nt_order",
 		User:     "test",
-		Password: "xxxx",
+		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -332,11 +332,11 @@ func GetTimestamp(change string) int64 {
 
 func initProLogDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "101.132.43.121",
 		Port:     3306,
 		Name:     "nt_order_log",
 		User:     "nt_order",
-		Password: "xxxx",
+		Password: "8Iwi+GEimp3cmwEphIVe",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -364,11 +364,11 @@ func initProLogDatabase() {
 
 func initTestLogDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "192.168.0.242",
 		Port:     3311,
 		Name:     "nt_order_log",
 		User:     "test",
-		Password: "xxxx",
+		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)

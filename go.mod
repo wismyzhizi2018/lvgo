@@ -24,7 +24,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/google/uuid v1.1.4
+	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
 	github.com/gookit/color v1.4.2
 	github.com/gorilla/websocket v1.4.2
@@ -44,6 +44,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/smallnest/rpcx v1.6.9
 	github.com/spf13/viper v1.8.1
+	github.com/tal-tech/go-zero v1.2.5-0.20211201153323-b6bda54870fd // indirect
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	github.com/urfave/cli/v2 v2.3.0
@@ -52,10 +53,7 @@ require (
 	github.com/xxl-job/xxl-job-executor-go v1.0.1
 	go.mongodb.org/mongo-driver v1.7.0
 	go.uber.org/zap v1.17.0
-	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6 // indirect
-	google.golang.org/genproto v0.0.0-20210820002220-43fce44e7af1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.me/selling-partner-api-sdk v0.0.0-20210707065407-720a4a068b4f
 	gorm.io/driver/mysql v1.1.1

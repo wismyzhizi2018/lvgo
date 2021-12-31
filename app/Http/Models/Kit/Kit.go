@@ -5,6 +5,7 @@ package Kit
 
 import (
 	"database/sql"
+	"order/bootstrap/driver"
 
 	"github.com/go-redis/redis/v8"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,6 +17,7 @@ var (
 	DB  *gorm.DB      // 连接gorm扩展
 	RDB *redis.Client // 连接Redis扩展
 	MDB *mongo.Client // 连接MongoDb扩展
+	DAO driver.MysqlService // 连接MongoDb扩展
 )
 
 // driver.NewService(config.DatabaseConfig).GetMYSQLConnection("mysql")

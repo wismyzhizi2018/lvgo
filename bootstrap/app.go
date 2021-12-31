@@ -61,16 +61,17 @@ func (app *Application) App() {
 
 	// 加载mysql链接
 	baseInfo := config.GetDataBaseConfig()
-	driver.NewService(baseInfo).InitConnection()
-	driver.InitGorm()
+	newDataBase := driver.NewService(baseInfo)
+	newDataBase.InitConnection()
+	//driver.InitGorm()
 	driver.InitRedis()
 	driver.InitMongo()
 
-	DB, _ := driver.NewService(baseInfo).GetMYSQLConnection("mysql")
-	Kit.Db = DB
+	Kit.DAO = newDataBase
+	Kit.DB, _ = Kit.DAO.Connection("mysql")
 	Kit.RDB = driver.RedisDb
 	Kit.MDB = driver.MongodbClient
-	Kit.DB = driver.GDB["mysql"]
+	//Kit.DB  = driver.GDB["mysql"]
 	defer driver.NewService(baseInfo).CloseConnection()
 	// 服务停止时清理数据库链接
 

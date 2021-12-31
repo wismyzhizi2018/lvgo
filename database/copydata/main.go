@@ -100,7 +100,7 @@ type Order_Main struct {
 	OverseasWarehouseStatus string  `orm:"overseas_warehouse_status"`
 	PayPalID                string  `orm:"pay_pal_id"`
 	ProductCost             float64 `orm:"product_cost"`
-	HeadCost                float64  `orm:"head_cost"`
+	HeadCost                float64 `orm:"head_cost"`
 	CarrierCode             string  `orm:"carrier_code"`
 	WithheldTax             string  `orm:"withheld_tax"`
 	OtherFee                string  `orm:"other_fee"`

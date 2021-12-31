@@ -3,12 +3,13 @@ package driver
 import (
 	"database/sql"
 	"fmt"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"order/config"
 	"os"
 	"strconv"
 	"time"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 
 	"github.com/gookit/color"
 
@@ -95,7 +96,7 @@ func mysqlConnect(connections string, dbConfig *config.DBSQLConf) (*gorm.DB, err
 		color.Danger.Println(connections+"MySQL数据库连接失败。。。", err.Error())
 		os.Exit(200)
 	}
-	//启用gorm
+	// 启用gorm
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{
 		Conn: MysqlDb,
 	}), &gorm.Config{})

@@ -13,10 +13,10 @@ import (
 )
 
 var (
-	Db  *sql.DB       // 连接mysql扩展
-	DB  *gorm.DB      // 连接gorm扩展
-	RDB *redis.Client // 连接Redis扩展
-	MDB *mongo.Client // 连接MongoDb扩展
+	Db  *sql.DB             // 连接mysql扩展
+	DB  *gorm.DB            // 连接gorm扩展
+	RDB *redis.Client       // 连接Redis扩展
+	MDB *mongo.Client       // 连接MongoDb扩展
 	DAO driver.MysqlService // 连接MongoDb扩展
 )
 

@@ -44,7 +44,7 @@ func (app *Application) App() {
 	HttpServer := app.HttpServer
 	// 加载配置信息
 	config.InitEmbedData(app.BytesContent)
-	//config.InitNACOS()
+	// config.InitNACOS()
 	mainDirectory, _ := os.Getwd()
 	mainDirectory = mainDirectory + "/"
 	bytes, err := ioutil.ReadFile(mainDirectory + "config/banner.txt")
@@ -63,7 +63,7 @@ func (app *Application) App() {
 	baseInfo := config.GetDataBaseConfig()
 	newDataBase := driver.NewService(baseInfo)
 	newDataBase.InitConnection()
-	//driver.InitGorm()
+	// driver.InitGorm()
 	driver.InitRedis()
 	driver.InitMongo()
 
@@ -71,7 +71,7 @@ func (app *Application) App() {
 	Kit.DB, _ = Kit.DAO.Connection("mysql")
 	Kit.RDB = driver.RedisDb
 	Kit.MDB = driver.MongodbClient
-	//Kit.DB  = driver.GDB["mysql"]
+	// Kit.DB  = driver.GDB["mysql"]
 	defer driver.NewService(baseInfo).CloseConnection()
 	// 服务停止时清理数据库链接
 

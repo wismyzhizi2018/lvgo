@@ -108,6 +108,7 @@ type Order_Main struct {
 	VoucherPlatform         string  `orm:"voucher_platform"`
 	OverTimeLeft            string  `orm:"over_time_left"`
 	IsUpdate                int     `orm:"is_update"`
+	OrderLocalTime          string  `orm:"order_local_time"`
 }
 
 func (user *Order_Main) BeforeSave(scope *gorm.DB) (err error) {
@@ -121,6 +122,10 @@ func (user *Order_Main) BeforeSave(scope *gorm.DB) (err error) {
 	user.UpdateTrackTime = timeToData(GetTimestamp(user.UpdateTrackTime))
 	user.UpdateFollowTime = timeToData(GetTimestamp(user.UpdateFollowTime))
 	user.OverTimeLeft = timeToData(GetTimestamp(user.OverTimeLeft))
+	user.OrderLocalTime = timeToData(GetTimestamp(user.OrderLocalTime))
+	if user.WarehouseID == "2" {
+		user.WarehouseID = "31"
+	}
 	// fmt.Println(user)
 	return nil
 }
@@ -259,11 +264,11 @@ func main() {
 
 func initProDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "101.132.43.121",
 		Port:     3306,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order",
+		User:     "yeweipeng",
+		Password: "cI4uTYCWenv3fyb0",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -291,11 +296,11 @@ func initProDatabase() {
 
 func initTestDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "172.16.20.232",
 		Port:     3311,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order",
+		User:     "test",
+		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -332,11 +337,11 @@ func GetTimestamp(change string) int64 {
 
 func initProLogDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "101.132.43.121",
 		Port:     3306,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order_log",
+		User:     "yeweipeng",
+		Password: "cI4uTYCWenv3fyb0",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)
@@ -364,11 +369,11 @@ func initProLogDatabase() {
 
 func initTestLogDatabase() {
 	c := MysqlConfig{
-		Host:     "xxxx",
+		Host:     "172.16.20.232",
 		Port:     3311,
-		Name:     "xxxx",
-		User:     "xxxx",
-		Password: "xxxx",
+		Name:     "nt_order_log",
+		User:     "test",
+		Password: "yrv1+LtyRjLUb7QbVSlxXlxjcJ8=",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.User, c.Password, c.Host, c.Port, c.Name)

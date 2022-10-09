@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"go.uber.org/zap"
+	"io/ioutil"
+	"net/http"
 	"sync"
 )
 
@@ -47,11 +50,10 @@ func main() {
 func pushLazadaGetOrderItems(AccessToken string, Wg *sync.WaitGroup, response chan *OutOrderInfo, limiter chan struct{}) {
 	// 计数器-1
 	defer Wg.Done()
-	// AccessToken := _this.AccessToken
-	// OrderId := _this.OrderId
-	// Country := _this.Country
-	// OutInfo := _this.OutInfo
-	out := &OutOrderInfo{title: AccessToken}
+	header := make(map[string]string)
+	url := "http://127.0.0.1:8787/info/queue"
+	req := newget(url, header)
+	out := &OutOrderInfo{title: req}
 	if AccessToken != "" {
 		response <- out
 	} else {
@@ -59,4 +61,27 @@ func pushLazadaGetOrderItems(AccessToken string, Wg *sync.WaitGroup, response ch
 	}
 	// 释放一个并发
 	<-limiter
+}
+
+func newget(url string, headers map[string]string) string {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		zap.S().Infof("this is %s", err)
+	}
+	if headers != nil {
+		for key, val := range headers {
+			req.Header.Add(key, val)
+		}
+	}
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		zap.S().Infof("this is %s", err)
+	}
+	defer res.Body.Close()
+	resBody, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		zap.S().Infof("this is %s", err)
+	}
+	return string(resBody)
 }
